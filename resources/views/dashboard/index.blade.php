@@ -10,352 +10,432 @@
 @endsection
 
 @section('content')
-    <div class="row g-6">
-        <!-- Website Analytics -->
-        <div class="col-lg-6">
-            <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg"
-                id="swiper-with-pagination-cards">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="row">
-                            <div class="col-12">
-                                <h5 class="text-white mb-0">Website Analytics</h5>
-                                <small>Total 28.5% Conversion Rate</small>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row g-6">
+            <!-- View sales -->
+            <div class="col-xl-6">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="d-flex align-items-end row">
+                                <div class="col-7">
+                                    <div class="card-body text-nowrap">
+                                        <h5 class="card-title mb-0">Congratulations {{ Auth::user()->name }}! 🎉</h5>
+                                        <p class="mb-2">Here what's happening in your account today</p>
+                                        @if (Auth::user()->hasRole('parent'))
+                                            <a href="javascript:;" class="btn btn-primary">View Children</a>
+                                        @else
+                                            <a href="javascript:;" class="btn btn-primary">View Profile</a>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-5 text-center text-sm-left">
+                                    <div class="card-body pb-0 px-0 px-md-4">
+                                        <img src="{{ asset('assets/img/illustrations/card-advance-sale.png') }}"
+                                            height="140" alt="view sales" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-                                    <h6 class="text-white mt-0 mt-md-3 mb-4">Traffic</h6>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="d-flex mb-4 align-items-center">
-                                                    <p class="mb-0 fw-medium me-2 website-analytics-text-bg">28%</p>
-                                                    <p class="mb-0">Sessions</p>
-                                                </li>
-                                                <li class="d-flex align-items-center">
-                                                    <p class="mb-0 fw-medium me-2 website-analytics-text-bg">1.2k</p>
-                                                    <p class="mb-0">Leads</p>
-                                                </li>
-                                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-xl-12">
+                        <div class="row">
+                            @if (Auth::user()->hasRole('parent'))
+                                <!-- Total Parents -->
+                                <div class="col-lg-6 col-sm-6 mt-2">
+                                    <div class="card card-border-shadow-primary h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-primary">
+                                                        <i class="ti ti-users icon-28px"></i>
+                                                    </span>
+                                                </div>
+                                                <h4 class="mb-0">2</h4>
+                                            </div>
+                                            <p class="mb-1">Total Children Enrolled</p>
                                         </div>
-                                        <div class="col-6">
-                                            <ul class="list-unstyled mb-0">
-                                                <li class="d-flex mb-4 align-items-center">
-                                                    <p class="mb-0 fw-medium me-2 website-analytics-text-bg">3.1k</p>
-                                                    <p class="mb-0">Page Views</p>
-                                                </li>
-                                                <li class="d-flex align-items-center">
-                                                    <p class="mb-0 fw-medium me-2 website-analytics-text-bg">12%</p>
-                                                    <p class="mb-0">Conversions</p>
-                                                </li>
-                                            </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Total Enrolled Children -->
+                                <div class="col-lg-6 col-sm-6 mt-2">
+                                    <div class="card card-border-shadow-warning h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-warning">
+                                                        <i class="ti ti-school icon-28px"></i>
+                                                    </span>
+                                                </div>
+                                                <h4 class="mb-0">8</h4>
+                                            </div>
+                                            <p class="mb-1">Total Courses Enrolled</p>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-                                    <img src="../../assets/img/illustrations/card-website-analytics-1.png"
-                                        alt="Website Analytics" height="150" class="card-website-analytics-img" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="row">
-                            <div class="col-12">
-                                <h5 class="text-white mb-0">Website Analytics</h5>
-                                <small>Total 28.5% Conversion Rate</small>
-                            </div>
-                            <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-                                <h6 class="text-white mt-0 mt-md-3 mb-4">Spending</h6>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li class="d-flex mb-4 align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">12h</p>
-                                                <p class="mb-0">Spend</p>
-                                            </li>
-                                            <li class="d-flex align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">127</p>
-                                                <p class="mb-0">Order</p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li class="d-flex mb-4 align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">18</p>
-                                                <p class="mb-0">Order Size</p>
-                                            </li>
-                                            <li class="d-flex align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">2.3k</p>
-                                                <p class="mb-0">Items</p>
-                                            </li>
-                                        </ul>
+                            @else
+                                <!-- Total Parents -->
+                                <div class="col-lg-6 col-sm-6 mt-2">
+                                    <div class="card card-border-shadow-primary h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-primary">
+                                                        <i class="ti ti-users icon-28px"></i>
+                                                    </span>
+                                                </div>
+                                                <h4 class="mb-0">42</h4>
+                                            </div>
+                                            <p class="mb-1">Total Parents</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-                                <img src="../../assets/img/illustrations/card-website-analytics-2.png"
-                                    alt="Website Analytics" height="150" class="card-website-analytics-img" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="row">
-                            <div class="col-12">
-                                <h5 class="text-white mb-0">Website Analytics</h5>
-                                <small>Total 28.5% Conversion Rate</small>
-                            </div>
-                            <div class="col-lg-7 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-                                <h6 class="text-white mt-0 mt-md-3 mb-4">Revenue Sources</h6>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li class="d-flex mb-4 align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">268</p>
-                                                <p class="mb-0">Direct</p>
-                                            </li>
-                                            <li class="d-flex align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">62</p>
-                                                <p class="mb-0">Referral</p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-6">
-                                        <ul class="list-unstyled mb-0">
-                                            <li class="d-flex mb-4 align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">890</p>
-                                                <p class="mb-0">Organic</p>
-                                            </li>
-                                            <li class="d-flex align-items-center">
-                                                <p class="mb-0 fw-medium me-2 website-analytics-text-bg">1.2k</p>
-                                                <p class="mb-0">Campaign</p>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-5 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center">
-                                <img src="../../assets/img/illustrations/card-website-analytics-3.png"
-                                    alt="Website Analytics" height="150" class="card-website-analytics-img" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-        <!--/ Website Analytics -->
 
-        <!-- Average Daily Sales -->
-        <div class="col-xl-3 col-sm-6">
-            <div class="card h-100">
-                <div class="card-header pb-0">
-                    <h5 class="mb-3 card-title">Average Daily Sales</h5>
-                    <p class="mb-0 text-body">Total Sales This Month</p>
-                    <h4 class="mb-0">$28,450</h4>
-                </div>
-                <div class="card-body px-0">
-                    <div id="averageDailySales"></div>
+                                <!-- Total Enrolled Children -->
+                                <div class="col-lg-6 col-sm-6 mt-2">
+                                    <div class="card card-border-shadow-warning h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-warning">
+                                                        <i class="ti ti-school icon-28px"></i>
+                                                    </span>
+                                                </div>
+                                                <h4 class="mb-0">8</h4>
+                                            </div>
+                                            <p class="mb-1">Total Enrolled Children</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total Teachers -->
+                                <div class="col-lg-6 col-sm-6 mt-2">
+                                    <div class="card card-border-shadow-danger h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-danger">
+                                                        <i class="ti ti-chalkboard icon-28px"></i>
+                                                    </span>
+                                                </div>
+                                                <h4 class="mb-0">27</h4>
+                                            </div>
+                                            <p class="mb-1">Total Teachers</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total Groups -->
+                                <div class="col-lg-6 col-sm-6 mt-2">
+                                    <div class="card card-border-shadow-info h-100">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="avatar me-4">
+                                                    <span class="avatar-initial rounded bg-label-info">
+                                                        <i class="ti ti-users-group icon-28px"></i>
+                                                    </span>
+                                                </div>
+                                                <h4 class="mb-0">13</h4>
+                                            </div>
+                                            <p class="mb-1">Total Groups</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
             </div>
-        </div>
-        <!--/ Average Daily Sales -->
+            <!-- View sales -->
 
-        <!-- Sales Overview -->
-        <div class="col-xl-3 col-sm-6">
-            <div class="card h-100">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <p class="mb-0 text-body">Sales Overview</p>
-                        <p class="card-text fw-medium text-success">+18.2%</p>
-                    </div>
-                    <h4 class="card-title mb-1">$42.5k</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="d-flex gap-2 align-items-center mb-2">
-                                <span class="badge bg-label-info p-1 rounded"><i
-                                        class="ti ti-shopping-cart ti-sm"></i></span>
-                                <p class="mb-0">Order</p>
-                            </div>
-                            <h5 class="mb-0 pt-1">62.2%</h5>
-                            <small class="text-muted">6,440</small>
-                        </div>
-                        <div class="col-4">
-                            <div class="divider divider-vertical">
-                                <div class="divider-text">
-                                    <span class="badge-divider-bg bg-label-secondary">VS</span>
-                                </div>
+            @if (Auth::user()->hasRole('parent'))
+                <div class="col-12 col-xl-6 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <div class="card-title mb-0">
+                                <h5 class="m-0 me-2">Popular Courses</h5>
                             </div>
                         </div>
-                        <div class="col-4 text-end">
-                            <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
-                                <p class="mb-0">Visits</p>
-                                <span class="badge bg-label-primary p-1 rounded"><i
-                                        class="ti ti-link ti-sm"></i></span>
+                        <div class="px-5 py-4 border border-start-0 border-end-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0 text-uppercase">Instructors</p>
+                                <p class="mb-0 text-uppercase">Course</p>
                             </div>
-                            <h5 class="mb-0 pt-1">25.5%</h5>
-                            <small class="text-muted">12,749</small>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center mt-6">
-                        <div class="progress w-100" style="height: 10px">
-                            <div class="progress-bar bg-info" style="width: 70%" role="progressbar"
-                                aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
-                            <div class="progress-bar bg-primary" role="progressbar" style="width: 30%"
-                                aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/ Sales Overview -->
-
-        <!-- Earning Reports -->
-        <div class="col-lg-6">
-            <div class="card h-100">
-                <div class="card-header pb-0 d-flex justify-content-between">
-                    <div class="card-title mb-0">
-                        <h5 class="mb-1">Earning Reports</h5>
-                        <p class="card-subtitle">Weekly Earnings Overview</p>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-text-secondary rounded-pill text-muted border-0 p-2 me-n1"
-                            type="button" id="earningReportsId" data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="ti ti-dots-vertical ti-md text-muted"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="earningReportsId">
-                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="row align-items-center g-md-8">
-                        <div class="col-12 col-md-5 d-flex flex-column">
-                            <div class="d-flex gap-2 align-items-center mb-3 flex-wrap">
-                                <h2 class="mb-0">$468</h2>
-                                <div class="badge rounded bg-label-success">+4.2%</div>
-                            </div>
-                            <small class="text-body">You informed of this week compared to last week</small>
-                        </div>
-                        <div class="col-12 col-md-7 ps-xl-8">
-                            <div id="weeklyEarningReports"></div>
-                        </div>
-                    </div>
-                    <div class="border rounded p-5 mt-5">
-                        <div class="row gap-4 gap-sm-0">
-                            <div class="col-12 col-sm-4">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <div class="badge rounded bg-label-primary p-1">
-                                        <i class="ti ti-currency-dollar ti-sm"></i>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
                                     </div>
-                                    <h6 class="mb-0 fw-normal">Earnings</h6>
-                                </div>
-                                <h4 class="my-2">$545.69</h4>
-                                <div class="progress w-75" style="height: 4px">
-                                    <div class="progress-bar" role="progressbar" style="width: 65%"
-                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <div class="badge rounded bg-label-info p-1"><i
-                                            class="ti ti-chart-pie-2 ti-sm"></i></div>
-                                    <h6 class="mb-0 fw-normal">Profit</h6>
-                                </div>
-                                <h4 class="my-2">$256.34</h4>
-                                <div class="progress w-75" style="height: 4px">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
-                                        aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-4">
-                                <div class="d-flex gap-2 align-items-center">
-                                    <div class="badge rounded bg-label-danger p-1">
-                                        <i class="ti ti-brand-paypal ti-sm"></i>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Maven Analytics</h6>
+                                            <small class="text-truncate text-body">Business Intelligence</small>
+                                        </div>
                                     </div>
-                                    <h6 class="mb-0 fw-normal">Expense</h6>
                                 </div>
-                                <h4 class="my-2">$74.19</h4>
-                                <div class="progress w-75" style="height: 4px">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 65%"
-                                        aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">English</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Bentlee Emblin</h6>
+                                            <small class="text-truncate text-body">Digital Marketing</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">Mathematics</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle" />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
+                                            <small class="text-truncate text-body">UI/UX Design</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">Physics</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <!--/ Earning Reports -->
-
-        <!-- Support Tracker -->
-        <div class="col-md-6">
-            <div class="card h-100">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="card-title mb-0">
-                        <h5 class="mb-1">Support Tracker</h5>
-                        <p class="card-subtitle">Last 7 Days</p>
-                    </div>
-                    <div class="dropdown">
-                        <button class="btn btn-text-secondary rounded-pill text-muted border-0 p-2 me-n1"
-                            type="button" id="supportTrackerMenu" data-bs-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                            <i class="ti ti-dots-vertical ti-md text-muted"></i>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="supportTrackerMenu">
-                            <a class="dropdown-item" href="javascript:void(0);">View More</a>
-                            <a class="dropdown-item" href="javascript:void(0);">Delete</a>
+            @else
+                <div class="col-12 col-xl-6 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="bg-label-primary rounded-3 text-center mb-4 pt-6">
+                                <img class="img-fluid" src="{{ asset('assets/img/illustrations/girl-with-laptop.png') }}"
+                                    alt="Card girl image" width="140" />
+                            </div>
+                            <h5 class="mb-2">Upcoming Webinar</h5>
+                            <p class="small">
+                                Next Generation Frontend Architecture Using Layout Engine And React Native Web.
+                            </p>
+                            <div class="row mb-4 g-3">
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <span class="avatar-initial rounded bg-label-primary"><i
+                                                    class="icon-base ti ti-calendar-event icon-28px"></i></span>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-nowrap">17 Nov 23</h6>
+                                            <small>Date</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar flex-shrink-0 me-3">
+                                            <span class="avatar-initial rounded bg-label-primary"><i
+                                                    class="icon-base ti ti-clock icon-28px"></i></span>
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0 text-nowrap">32 minutes</h6>
+                                            <small>Duration</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 text-center">
+                                <a href="javascript:void(0);" class="btn btn-primary w-100 d-grid">Join the event</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card-body row">
-                    <div class="col-12 col-sm-4 col-md-12 col-lg-4">
-                        <div class="mt-lg-4 mt-lg-2 mb-lg-6 mb-2">
-                            <h2 class="mb-0">164</h2>
-                            <p class="mb-0">Total Tickets</p>
-                        </div>
-                        <ul class="p-0 m-0">
-                            <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-                                <div class="badge rounded bg-label-primary p-1_5"><i class="ti ti-ticket ti-md"></i>
+
+                <div class="col-12 col-xl-8">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <h5 class="card-title m-0 me-2">Topic you are interested in</h5>
+                            <div class="dropdown">
+                                <button class="btn p-0" type="button" id="topic" data-bs-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="icon-base ti tabler-dots-vertical icon-22px text-body-secondary"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="topic">
+                                    <a class="dropdown-item" href="javascript:void(0);">Highest Views</a>
+                                    <a class="dropdown-item" href="javascript:void(0);">See All</a>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="card-body row g-3">
+                            <div class="col-md-8">
+                                <div id="horizontalBarChart"></div>
+                            </div>
+                            <div class="col-md-4 d-flex justify-content-around align-items-center">
                                 <div>
-                                    <h6 class="mb-0 text-nowrap">New Tickets</h6>
-                                    <small class="text-muted">142</small>
+                                    <div class="d-flex align-items-baseline">
+                                        <span class="text-primary me-2"><i
+                                                class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                                        <div>
+                                            <p class="mb-0">UI Design</p>
+                                            <h5>35%</h5>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline my-12">
+                                        <span class="text-success me-2"><i
+                                                class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                                        <div>
+                                            <p class="mb-0">Music</p>
+                                            <h5>14%</h5>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <span class="text-danger me-2"><i
+                                                class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                                        <div>
+                                            <p class="mb-0">React</p>
+                                            <h5>10%</h5>
+                                        </div>
+                                    </div>
                                 </div>
-                            </li>
-                            <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-                                <div class="badge rounded bg-label-info p-1_5">
-                                    <i class="ti ti-circle-check ti-md"></i>
-                                </div>
+
                                 <div>
-                                    <h6 class="mb-0 text-nowrap">Open Tickets</h6>
-                                    <small class="text-muted">28</small>
+                                    <div class="d-flex align-items-baseline">
+                                        <span class="text-info me-2"><i
+                                                class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                                        <div>
+                                            <p class="mb-0">UX Design</p>
+                                            <h5>20%</h5>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline my-12">
+                                        <span class="text-secondary me-2"><i
+                                                class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                                        <div>
+                                            <p class="mb-0">Animation</p>
+                                            <h5>12%</h5>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-baseline">
+                                        <span class="text-warning me-2"><i
+                                                class="icon-base ti tabler-circle-filled icon-12px"></i></span>
+                                        <div>
+                                            <p class="mb-0">SEO</p>
+                                            <h5>9%</h5>
+                                        </div>
+                                    </div>
                                 </div>
-                            </li>
-                            <li class="d-flex gap-4 align-items-center pb-1">
-                                <div class="badge rounded bg-label-warning p-1_5"><i class="ti ti-clock ti-md"></i>
-                                </div>
-                                <div>
-                                    <h6 class="mb-0 text-nowrap">Response Time</h6>
-                                    <small class="text-muted">1 Day</small>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-12 col-sm-8 col-md-12 col-lg-8">
-                        <div id="supportTracker"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                <div class="col-12 col-xl-4 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header d-flex align-items-center justify-content-between">
+                            <div class="card-title mb-0">
+                                <h5 class="m-0 me-2">Popular Instructors</h5>
+                            </div>
+                            <div class="dropdown">
+                                <button class="btn text-body-secondary p-0" type="button" id="popularInstructors"
+                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="icon-base ti tabler-dots-vertical icon-22px"></i>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="popularInstructors">
+                                    <a class="dropdown-item" href="javascript:void(0);">Select All</a>
+                                    <a class="dropdown-item" href="javascript:void(0);">Refresh</a>
+                                    <a class="dropdown-item" href="javascript:void(0);">Share</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-5 py-4 border border-start-0 border-end-0">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <p class="mb-0 text-uppercase">Instructors</p>
+                                <p class="mb-0 text-uppercase">courses</p>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/1.png" alt="Avatar" class="rounded-circle" />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Maven Analytics</h6>
+                                            <small class="text-truncate text-body">Business Intelligence</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">33</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/2.png" alt="Avatar" class="rounded-circle" />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Bentlee Emblin</h6>
+                                            <small class="text-truncate text-body">Digital Marketing</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">52</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/3.png" alt="Avatar" class="rounded-circle" />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Benedetto Rossiter</h6>
+                                            <small class="text-truncate text-body">UI/UX Design</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">12</h6>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar avatar me-4">
+                                        <img src="../../assets/img/avatars/4.png" alt="Avatar" class="rounded-circle" />
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <h6 class="mb-0 text-truncate">Beverlie Krabbe</h6>
+                                            <small class="text-truncate text-body">React Native</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <h6 class="mb-0">8</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
-        <!--/ Support Tracker -->
     </div>
 @endsection
 
 @section('script')
+    <script src="{{ asset('assets/js/app-academy-dashboard.js') }}"></script>
 @endsection

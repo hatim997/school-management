@@ -37,6 +37,16 @@
 
 <script>
     $(document).ready(function() {
+        var select2 = $('.select2');
+        if (select2.length) {
+            select2.each(function() {
+                var $this = $(this);
+                $this.wrap('<div class="position-relative"></div>').select2({
+                    placeholder: 'Select value',
+                    dropdownParent: $this.parent()
+                });
+            });
+        }
         $(document).on('click', '.copy-icon', function() {
             var textToCopy = $(this).prev().text().trim(); // Get text from previous element
 
@@ -54,14 +64,14 @@
                 tooltipInstance.dispose(); // Destroy tooltip to update title
             }
 
-            $this.attr('title', '{{__("Copied")}}'); // Update title
+            $this.attr('title', '{{ __('Copied') }}'); // Update title
             $this.tooltip({
                 trigger: 'manual'
             }).tooltip('show'); // Show updated tooltip
 
             // Reset tooltip after 1.5 seconds
             setTimeout(() => {
-                $this.tooltip('hide').attr('title', '{{__("Copy")}}').tooltip();
+                $this.tooltip('hide').attr('title', '{{ __('Copy') }}').tooltip();
             }, 1500);
         });
         $(function() {
@@ -89,10 +99,10 @@
                     buttons: [{
                         extend: 'collection',
                         className: 'btn btn-label-secondary dropdown-toggle me-4 waves-effect waves-light border-left-0 border-right-0 rounded',
-                        text: '<i class="ti ti-upload ti-xs me-sm-1 align-text-bottom"></i> <span class="d-none d-sm-inline-block">{{__("Export")}}</span>',
+                        text: '<i class="ti ti-upload ti-xs me-sm-1 align-text-bottom"></i> <span class="d-none d-sm-inline-block">{{ __('Export') }}</span>',
                         buttons: [{
                                 extend: 'print',
-                                text: '<i class="ti ti-printer me-1"></i>{{__("Print")}}',
+                                text: '<i class="ti ti-printer me-1"></i>{{ __('Print') }}',
                                 className: 'dropdown-item',
                                 exportOptions: {
                                     columns: ':not(:last-child)' // Exclude the last column (Actions)
@@ -100,7 +110,7 @@
                             },
                             {
                                 extend: 'csv',
-                                text: '<i class="ti ti-file-text me-1"></i>{{__("Csv")}}',
+                                text: '<i class="ti ti-file-text me-1"></i>{{ __('Csv') }}',
                                 className: 'dropdown-item',
                                 exportOptions: {
                                     columns: ':not(:last-child)' // Exclude the last column (Actions)
@@ -108,7 +118,7 @@
                             },
                             {
                                 extend: 'excel',
-                                text: '<i class="ti ti-file-spreadsheet me-1"></i>{{__("Excel")}}',
+                                text: '<i class="ti ti-file-spreadsheet me-1"></i>{{ __('Excel') }}',
                                 className: 'dropdown-item',
                                 exportOptions: {
                                     columns: ':not(:last-child)' // Exclude the last column (Actions)
@@ -116,7 +126,7 @@
                             },
                             {
                                 extend: 'pdf',
-                                text: '<i class="ti ti-file-description me-1"></i>{{__("Pdf")}}',
+                                text: '<i class="ti ti-file-description me-1"></i>{{ __('Pdf') }}',
                                 className: 'dropdown-item',
                                 exportOptions: {
                                     columns: ':not(:last-child)' // Exclude the last column (Actions)
@@ -124,7 +134,7 @@
                             },
                             {
                                 extend: 'copy',
-                                text: '<i class="ti ti-copy me-1"></i>{{__("Copy")}}',
+                                text: '<i class="ti ti-copy me-1"></i>{{ __('Copy') }}',
                                 className: 'dropdown-item',
                                 exportOptions: {
                                     columns: ':not(:last-child)' // Exclude the last column (Actions)
@@ -147,7 +157,7 @@
 <script>
     @if (Session::has('success'))
         Swal.fire({
-            title: '{{__("Success!")}}',
+            title: '{{ __('Success!') }}',
             text: "{{ __(Session::get('success')) }}",
             icon: 'success',
             timer: 2000,
@@ -157,7 +167,7 @@
 
     @if (Session::has('message'))
         Swal.fire({
-            title: '{{__("Info!")}}',
+            title: '{{ __('Info!') }}',
             text: "{{ __(Session::get('message')) }}",
             icon: 'info',
             timer: 2000,
@@ -167,7 +177,7 @@
 
     @if (Session::has('error'))
         Swal.fire({
-            title: '{{__("Error!")}}',
+            title: '{{ __('Error!') }}',
             text: "{{ __(Session::get('error')) }}",
             icon: 'error',
             timer: 2000,
@@ -180,12 +190,12 @@
         event.preventDefault();
         var form = $(this).closest("form");
         Swal.fire({
-            title: '{{__("Are you sure?")}}',
-            text: '{{__("You would not be able to revert this!")}}',
+            title: '{{ __('Are you sure?') }}',
+            text: '{{ __('You would not be able to revert this!') }}',
             icon: 'warning',
             showCancelButton: true,
-            cancelButtonText: '{{__("Cancel")}}',
-            confirmButtonText: '{{__("Yes, delete it!")}}',
+            cancelButtonText: '{{ __('Cancel') }}',
+            confirmButtonText: '{{ __('Yes, delete it!') }}',
             customClass: {
                 confirmButton: 'btn btn-primary me-3 waves-effect waves-light',
                 cancelButton: 'btn btn-label-secondary waves-effect waves-light'

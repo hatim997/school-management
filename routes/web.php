@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
+use App\Http\Controllers\Dashboard\Parents\ChildrenController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
@@ -136,6 +137,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('send-mail/setting', [SettingController::class, 'sendTestMail'])->name('setting.send_test_mail');
 
             // User Dashboard Authentication Routes
+
+            //Parents Routes
+            Route::resource('children', ChildrenController::class);
 
 
 

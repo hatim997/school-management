@@ -18,7 +18,7 @@ class SettingSeeder extends Seeder
     public function run(): void
     {
         CompanySetting::create([
-            'company_name' => 'School Management',
+            'company_name' => 'Dynamic Learners',
         ]);
 
         RecaptchaSetting::create([

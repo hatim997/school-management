@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('last_name')->nullable();
             $table->string('profile_image')->nullable();
             $table->timestamp('dob')->nullable();
+            $table->string('age')->nullable();
             $table->foreignIdFor(Gender::class)->nullable()
                 ->constrained()
                 ->cascadeOnDelete();
@@ -46,6 +47,7 @@ return new class extends Migration
             $table->string('street')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('bio')->nullable();
+            $table->string('qualifications')->nullable();
             $table->string('facebook_url')->nullable();
             $table->string('linkedin_url')->nullable();
             $table->string('skype_url')->nullable();

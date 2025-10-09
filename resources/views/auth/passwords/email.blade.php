@@ -6,7 +6,7 @@
 
 
 @section('content')
-    <!-- /Left Text -->
+    {{-- <!-- /Left Text -->
     <div class="d-none d-lg-flex col-lg-8 p-0">
         <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
             <img src="{{asset('assets/img/illustrations/auth-forgot-password-illustration-light.png')}}"
@@ -47,7 +47,30 @@
             </div>
         </div>
     </div>
-    <!-- /Forgot Password -->
+    <!-- /Forgot Password --> --}}
+
+    <h5 class="mb-1">Forgot Password? 🔒</h5>
+    <p class="mb-6">Enter your email and we'll send you instructions to reset your password</p>
+    <form id="formAuthentication" class="mb-6" action="{{ route('password.email') }}" method="POST">
+        @csrf
+        <div class="mb-6">
+            <label for="email" class="form-label">{{ __('Email') }}</label><span class="text-danger">*</span>
+            <input type="text" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
+                placeholder="{{ __('Enter your email') }}" autofocus />
+            @error('email')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+        </div>
+        <button type="submit" class="btn btn-primary d-grid w-100">{{ __('Send Reset Link') }}</button>
+    </form>
+    <div class="text-center">
+        <a href="{{ route('login') }}" class="d-flex justify-content-center">
+            <i class="icon-base ti tabler-chevron-left scaleX-n1-rtl me-1_5"></i>
+            Back to login
+        </a>
+    </div>
 @endsection
 
 @section('script')
