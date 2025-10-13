@@ -17,7 +17,11 @@ return new class extends Migration
             $table->string('code');
             $table->string('price');
             $table->string('duration');
-            $table->string('description')->nullable();
+            $table->string('image')->nullable();
+            $table->string('short_description')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('rating')->default(5);
+            $table->integer('total_enrolled')->default(0);
             $table->enum('is_active', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

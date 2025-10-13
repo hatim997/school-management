@@ -1,9 +1,7 @@
 <?php
 
-use App\Models\Billing;
 use App\Models\ParentChild;
 use App\Models\Subject;
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('child_subjects', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(ParentChild::class)
                 ->constrained()
@@ -23,13 +21,7 @@ return new class extends Migration
             $table->foreignIdFor(Subject::class)
                 ->constrained()
                 ->cascadeOnDelete();
-            $table->foreignIdFor(Billing::class)
-                ->constrained()
-                ->cascadeOnDelete();
-            $table->string('amount');
-            $table->string('transaction_id');
-            $table->enum('payment_method', ['cash', 'card', 'bank', 'paypal', 'others'])->default('cash');
-            $table->enum('payment_status', ['pending', 'success', 'failed'])->default('pending');
+            $table->enum('status', ['pending', 'inprogress', 'complete'])->default('pending');
             $table->timestamps();
         });
     }
@@ -39,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('child_subjects');
     }
 };

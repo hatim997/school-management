@@ -23,7 +23,7 @@
                                         <h5 class="card-title mb-0">Congratulations {{ Auth::user()->name }}! 🎉</h5>
                                         <p class="mb-2">Here what's happening in your account today</p>
                                         @if (Auth::user()->hasRole('parent'))
-                                            <a href="javascript:;" class="btn btn-primary">View Children</a>
+                                            <a href="{{route('dashboard.children.index')}}" class="btn btn-primary">View Children</a>
                                         @else
                                             <a href="javascript:;" class="btn btn-primary">View Profile</a>
                                         @endif

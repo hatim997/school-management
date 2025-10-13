@@ -7,7 +7,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
+use App\Http\Controllers\Dashboard\Parents\CheckoutController;
 use App\Http\Controllers\Dashboard\Parents\ChildrenController;
+use App\Http\Controllers\Dashboard\Parents\SubjectController;
 use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
@@ -140,6 +142,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             //Parents Routes
             Route::resource('children', ChildrenController::class);
+            Route::resource('subjects', SubjectController::class);
+            Route::get('checkout/{id}', [CheckoutController::class, 'index'])->name('checkout.index');
+            Route::post('checkout', [CheckoutController::class, 'submitCheckout'])->name('checkout.submit');
 
 
 
