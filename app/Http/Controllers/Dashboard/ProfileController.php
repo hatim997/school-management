@@ -9,6 +9,8 @@ use App\Models\Gender;
 use App\Models\Language;
 use App\Models\MaritalStatus;
 use App\Models\Profile;
+use App\Models\Subject;
+use App\Models\TeacherSubject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,7 +36,9 @@ class ProfileController extends Controller
             $maritalStatuses = MaritalStatus::where('is_active', 'active')->get();
             $languages = Language::where('is_active', 'active')->get();
             $designations = Designation::where('is_active', 'active')->get();
-            return view('dashboard.profile.index',compact('profile','countries','genders','maritalStatuses','languages','designations'));
+            $subjects = Subject::where('is_active', 'active')->get();
+            $teacherSubjects = TeacherSubject::where('teacher_id', $user->id)->pluck('subject_id')->toArray();
+            return view('dashboard.profile.index',compact('profile','countries','genders','maritalStatuses','languages','designations','teacherSubjects','subjects'));
         } catch (\Throwable $th) {
             Log::error('Profile Index Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
@@ -223,6 +227,37 @@ class ProfileController extends Controller
             return redirect()->back()->with('success', 'Password Updated Successfully');
         } catch (\Throwable $th) {
             Log::error('Password Update Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+            throw $th;
+        }
+    }
+
+    public function updateTeacherInfo(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'qualifications' => 'required|string',
+            'subject_id' => 'required|array|min:1',
+            'subject_id.*' => 'exists:subjects,id',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'Validation Error!');
+        }
+        try {
+            $user = Auth::user();
+            $profile = Profile::where('user_id', $user->id)->first();
+            $profile->qualifications = $request->qualifications;
+            $profile->save();
+            TeacherSubject::where('teacher_id', $user->id)->delete();
+            foreach ($request->subject_id as $subject) {
+                $teacherSubject = new TeacherSubject();
+                $teacherSubject->teacher_id = $user->id;
+                $teacherSubject->subject_id = $subject;
+                $teacherSubject->save();
+            }
+            return redirect()->back()->with('success', 'Teacher info Updated Successfully');
+        } catch (\Throwable $th) {
+            Log::error('Teacher info Update Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
             throw $th;
         }

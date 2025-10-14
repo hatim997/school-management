@@ -94,6 +94,13 @@
                             {{ __('Security') }}
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link profile-tab" href="#" data-target="#teacher-info-section"
+                            data-query="teacher-info">
+                            <i class="ti-sm ti ti-id me-1_5"></i>
+                            {{ __('Teacher Info') }}
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -256,6 +263,9 @@
             <div id="security-section" style="display: none;">
                 @include('dashboard.profile.sections.security')
             </div>
+            <div id="teacher-info-section" style="display: none;">
+                @include('dashboard.profile.sections.teacher-info')
+            </div>
         </div>
     </div>
 @endsection
@@ -274,6 +284,7 @@
                     'profile': '#profile-section',
                     'account': '#account-settings-section',
                     'security': '#security-section',
+                    'teacher-info': '#teacher-info-section',
                 };
 
                 var activeTabSelector = tabMapping[activeTab] || '#profile-section';

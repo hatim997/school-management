@@ -15,6 +15,7 @@ use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\Teacher\ClassGroupController;
 use App\Http\Controllers\Dashboard\User\ArchivedUserController;
 use App\Http\Controllers\Dashboard\User\UserController;
 use App\Http\Middleware\CheckAccountActivation;
@@ -111,6 +112,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::resource('profile', ProfileController::class);
         Route::post('profile/setting/account/{id}', [ProfileController::class, 'accountDeactivation'])->name('account.deactivate');
         Route::post('profile/security/password/{id}', [ProfileController::class, 'passwordUpdate'])->name('update.password');
+        Route::post('profile/update/teacher-info', [ProfileController::class, 'updateTeacherInfo'])->name('profile.update-teacher');
 
         Route::get('/notifications', [NotificationController::class, 'index']);
         Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
@@ -154,7 +156,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('checkout/{id}', [CheckoutController::class, 'index'])->name('checkout.index');
             Route::post('checkout', [CheckoutController::class, 'submitCheckout'])->name('checkout.submit');
 
-
+            //Teacher Routes
+            Route::resource('class-groups', ClassGroupController::class);
 
         });
     });

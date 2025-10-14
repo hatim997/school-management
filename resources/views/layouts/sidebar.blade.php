@@ -47,6 +47,16 @@
                 </li>
             @endcan
         @endrole
+        @role('teacher')
+            @can(['view class groups'])
+                <li class="menu-item {{ request()->routeIs('dashboard.class-groups.*') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.class-groups.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-users-group"></i>
+                        <div>{{ __('Class Groups') }}</div>
+                    </a>
+                </li>
+            @endcan
+        @endrole
         @can(['view teacher'])
             <li class="menu-item {{ request()->routeIs('dashboard.teachers.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.teachers.index') }}" class="menu-link">

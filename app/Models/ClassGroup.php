@@ -18,4 +18,9 @@ class ClassGroup extends Model
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
+
+    public function classGroupStudents()
+    {
+        return $this->hasMany(ClassGroupStudent::class, 'class_group_id');
+    }
 }
