@@ -100,7 +100,7 @@ class CheckoutController extends Controller
 
                 if ($availableTeachers->isEmpty()) {
                     DB::rollBack();
-                    return redirect()->back()->with('error', 'No teacher available for this subject at the moment.');
+                    return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'No teacher available for this subject at the moment.');
                 }
 
                 // Exclude teachers already assigned to a class group for this subject
@@ -111,7 +111,7 @@ class CheckoutController extends Controller
 
                 if ($eligibleTeachers->isEmpty()) {
                     DB::rollBack();
-                    return redirect()->back()->with('error', 'All teachers for this subject already have assigned groups.');
+                    return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', 'All teachers for this subject already have assigned groups.');
                 }
 
                 // Pick one teacher (random or by your logic)
@@ -160,7 +160,7 @@ class CheckoutController extends Controller
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error('Checkout Submit Failed', ['error' => $th->getMessage()]);
-            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+            return redirect()->back()->withErrors($validator)->withInput($request->all())->with('error', "Something went wrong! Please try again later");
             throw $th;
         }
     }

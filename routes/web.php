@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\GithubController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Dashboard\Admin\TeacherController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\Parents\CheckoutController;
@@ -102,6 +103,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/deactivated', function () {
         return view('errors.deactivated');
     })->name('deactivated');
+    Route::get('/admin-approval', function () {
+        return view('errors.admin-approval');
+    })->name('admin-approval');
     Route::middleware(['check.activation'])->group(function () {
 
         Route::resource('profile', ProfileController::class);
@@ -139,6 +143,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('send-mail/setting', [SettingController::class, 'sendTestMail'])->name('setting.send_test_mail');
 
             // User Dashboard Authentication Routes
+
+            //Admin Routes
+            Route::resource('teachers', TeacherController::class);
+            Route::get('teachers/approve/{id}', [TeacherController::class, 'approveTeacher'])->name('teachers.approve');
 
             //Parents Routes
             Route::resource('children', ChildrenController::class);

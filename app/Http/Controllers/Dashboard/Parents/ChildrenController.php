@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use App\Mail\ChildCreationMail;
+use App\Models\ChildSubject;
+use App\Models\ClassGroupStudent;
 use Illuminate\Support\Facades\Mail;
 
 class ChildrenController extends Controller
@@ -126,8 +128,36 @@ class ChildrenController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $this->authorize('view children');
+
+        try {
+            $parentChild = ParentChild::find($id);
+
+            if (!$parentChild) {
+                return redirect()->back()->with('error', "Child not found!");
+            }
+
+            $child = User::with('profile')->find($parentChild->child_id);
+
+            // Get all subjects and related groups of the child
+            $childSubjects = ChildSubject::with(['subject'])
+                ->where('parent_child_id', $id)
+                ->get();
+
+            $completedSubjects = $childSubjects->where('status', 'complete')->count();
+
+            // Get all groups where the child is enrolled (with subject + teacher)
+            $groupDetails = ClassGroupStudent::with(['classGroup.subject', 'classGroup.teacher'])
+                ->where('parent_child_id', $id)
+                ->get();
+
+            return view('dashboard.parents.children.show', compact('child', 'parentChild', 'childSubjects', 'groupDetails', 'completedSubjects'));
+        } catch (\Throwable $th) {
+            Log::error('Children Show Failed', ['error' => $th->getMessage()]);
+            return redirect()->back()->with('error', "Something went wrong! Please try again later");
+        }
     }
+
 
     /**
      * Show the form for editing the specified resource.

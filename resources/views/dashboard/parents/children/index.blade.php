@@ -55,11 +55,11 @@
                                         @endcan
                                         @canany(['update children'])
                                             <span class="text-nowrap">
-                                                <a href="{{ route('dashboard.children.edit', $children->id) }}"
-                                                    class="btn btn-icon btn-text-success waves-effect waves-light rounded-pill me-1 edit-order-btn"
+                                                <a href="{{ route('dashboard.children.show', $children->id) }}"
+                                                    class="btn btn-icon btn-text-warning waves-effect waves-light rounded-pill me-1 edit-order-btn"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    title="{{ __('Edit Children') }}">
-                                                    <i class="ti ti-edit ti-md"></i>
+                                                    title="{{ __('View Child Details') }}">
+                                                    <i class="ti ti-eye ti-md"></i>
                                                 </a>
                                             </span>
                                         @endcan

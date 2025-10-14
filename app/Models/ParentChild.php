@@ -16,4 +16,14 @@ class ParentChild extends Model
     {
         return $this->belongsTo(User::class, 'child_id');
     }
+
+    public function childSubjects()
+    {
+        return $this->hasMany(ChildSubject::class, 'child_subject_id');
+    }
+
+    public function classGroupStudents()
+    {
+        return $this->hasMany(ClassGroupStudent::class, 'class_group_student_id');
+    }
 }

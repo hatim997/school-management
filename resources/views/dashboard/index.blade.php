@@ -25,7 +25,7 @@
                                         @if (Auth::user()->hasRole('parent'))
                                             <a href="{{route('dashboard.children.index')}}" class="btn btn-primary">View Children</a>
                                         @else
-                                            <a href="javascript:;" class="btn btn-primary">View Profile</a>
+                                            <a href="{{route('profile.index')}}" class="btn btn-primary">View Profile</a>
                                         @endif
                                     </div>
                                 </div>

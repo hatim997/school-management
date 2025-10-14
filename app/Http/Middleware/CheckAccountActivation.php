@@ -16,15 +16,29 @@ class CheckAccountActivation
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Exclude the deactivated page itself from redirection
-        if ($request->routeIs('deactivated')) {
-            return $next($request);
+        // Exclude specific routes from redirection
+    if (!$request->user() || $request->routeIs(['login', 'login.attempt', 'register', 'register.attempt', 'logout', 'deactivated', 'admin-approval'])) {
+        return $next($request);
+    }
+
+        // Check authentication
+        if (Auth::check()) {
+            $status = Auth::user()->is_active;
+
+            if ($status === 'active') {
+                return $next($request);
+            }
+
+            if ($status === 'inactive') {
+                return redirect()->route('deactivated');
+            }
+
+            if ($status === 'pending') {
+                return redirect()->route('admin-approval');
+            }
         }
 
-        if (Auth::check() && Auth::user()->is_active !== 'active') {
-            // Redirect to the deactivation page
-            return redirect()->route('deactivated');
-        }
-        return $next($request);
+        // If user not authenticated, redirect to login
+        return redirect()->route('login');
     }
 }
