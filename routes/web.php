@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\GithubController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Dashboard\Admin\ClassGroupController as AdminClassGroupController;
+use App\Http\Controllers\Dashboard\Admin\ClassGroupScheduleController;
 use App\Http\Controllers\Dashboard\Admin\TeacherController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
@@ -15,6 +17,7 @@ use App\Http\Controllers\Dashboard\ProfileController;
 use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
+use App\Http\Controllers\Dashboard\Students\IndexController;
 use App\Http\Controllers\Dashboard\Teacher\ClassGroupController;
 use App\Http\Controllers\Dashboard\User\ArchivedUserController;
 use App\Http\Controllers\Dashboard\User\UserController;
@@ -149,6 +152,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
             //Admin Routes
             Route::resource('teachers', TeacherController::class);
             Route::get('teachers/approve/{id}', [TeacherController::class, 'approveTeacher'])->name('teachers.approve');
+            Route::resource('admin-class-groups', AdminClassGroupController::class);
+            // Route::resource('class-group-schedules', ClassGroupScheduleController::class);
+            Route::get('class-group-schedules/{id}', [ClassGroupScheduleController::class, 'index'])->name('class-group-schedules.index');
+            Route::get('class-group-schedules/create/{id}', [ClassGroupScheduleController::class, 'create'])->name('class-group-schedules.create');
+            Route::post('class-group-schedules/store{id}', [ClassGroupScheduleController::class, 'store'])->name('class-group-schedules.store');
+            Route::get('class-group-schedules/edit/{id}', [ClassGroupScheduleController::class, 'edit'])->name('class-group-schedules.edit');
+            Route::put('class-group-schedules/update{id}', [ClassGroupScheduleController::class, 'update'])->name('class-group-schedules.update');
+            Route::delete('class-group-schedules/delete{id}', [ClassGroupScheduleController::class, 'destroy'])->name('class-group-schedules.destroy');
 
             //Parents Routes
             Route::resource('children', ChildrenController::class);
@@ -158,6 +169,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             //Teacher Routes
             Route::resource('class-groups', ClassGroupController::class);
+
+            //Student Routes
+            Route::get('student/enrolled-subjects', [IndexController::class, 'enrolledSubjects'])->name('students.enrolled-subjects.index');
+            Route::get('student/enrolled-subjects/{id}', [IndexController::class, 'enrolledSubjectShow'])->name('students.enrolled-subjects.show');
+            Route::get('student/upcoming-classes', [IndexController::class, 'upcomingClasses'])->name('students.upcoming-classes.index');
 
         });
     });

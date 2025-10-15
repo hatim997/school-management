@@ -26,7 +26,7 @@
         <!-- Order Details Table -->
 
         <div class="row">
-            <div class="col-12 col-lg-12">
+            <div class="col-6 col-lg-6">
                 <div class="card mb-6">
                     <div class="card-header">
                         <h5>Students in {{ $classGroup->name }}</h5>
@@ -61,6 +61,38 @@
                                 @endforeach
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6 col-lg-6">
+                <div class="card mb-6">
+                    <div class="card-header">
+                        <h5 class="card-title m-0">Schedule</h5>
+                    </div>
+                    <div class="card-body pt-1">
+                        <ul class="timeline pb-0 mb-0">
+                            @if (isset($classGroupSchedules) && count($classGroupSchedules) > 0)
+                                @foreach ($classGroupSchedules as $schedule)
+                                    <li class="timeline-item timeline-item-transparent border-primary">
+                                        <span class="timeline-point timeline-point-primary"></span>
+                                        <div class="timeline-event">
+                                            <div class="timeline-header">
+                                                <h6 class="mb-0">{{ ucfirst($schedule->day) }}</h6>
+                                                @if ($schedule->zoom_link)
+                                                    <small class="text-body-secondary"><a href="{{ $schedule->zoom_link }}"
+                                                            class="btn btn-link">Join Now</a></small>
+                                                @endif
+                                            </div>
+                                            <p class="mt-3">
+                                                {{ \Carbon\Carbon::createFromFormat('H:i:s', $schedule->start_time)->format('h:i A') }}
+                                                -
+                                                {{ \Carbon\Carbon::createFromFormat('H:i:s', $schedule->end_time)->format('h:i A') }}
+                                            </p>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            @endif
+                        </ul>
                     </div>
                 </div>
             </div>

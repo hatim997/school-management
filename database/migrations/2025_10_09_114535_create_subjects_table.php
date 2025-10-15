@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->integer('rating')->default(5);
             $table->integer('total_enrolled')->default(0);
+            $table->enum('is_coming', ['0', '1'])->default('0');
             $table->enum('is_active', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });

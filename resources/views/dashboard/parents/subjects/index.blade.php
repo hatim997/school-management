@@ -78,7 +78,7 @@
                                                 class="h5">{{ $subject->name }}</a>
                                             <p class="mt-1">{{ $subject->short_description }}</p>
                                             <p class="d-flex align-items-center mb-1">
-                                                <i class="icon-base ti tabler-clock me-1"></i>{{ $subject->duration }}
+                                                <i class="icon-base ti ti-clock me-1"></i>{{ $subject->duration }}
                                                 weeks
                                             </p>
                                             <div

@@ -56,6 +56,29 @@
                     </a>
                 </li>
             @endcan
+        @else
+            @can(['view class groups'])
+                <li class="menu-item {{ request()->routeIs('dashboard.admin-class-groups.*') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.admin-class-groups.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-users-group"></i>
+                        <div>{{ __('Class Groups') }}</div>
+                    </a>
+                </li>
+            @endcan
+        @endrole
+        @role('student')
+            <li class="menu-item {{ request()->routeIs('dashboard.students.enrolled-subjects.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.students.enrolled-subjects.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-users-group"></i>
+                    <div>{{ __('Enrolled Subjects') }}</div>
+                </a>
+            </li>
+            <li class="menu-item {{ request()->routeIs('dashboard.students.upcoming-classes.*') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.students.upcoming-classes.index') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-users-group"></i>
+                    <div>{{ __('Upcoming Classes') }}</div>
+                </a>
+            </li>
         @endrole
         @can(['view teacher'])
             <li class="menu-item {{ request()->routeIs('dashboard.teachers.*') ? 'active' : '' }}">

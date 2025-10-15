@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassGroup;
+use App\Models\ClassGroupSchedule;
 use App\Models\ClassGroupStudent;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -38,6 +39,11 @@ class ClassGroupController extends Controller
             ])->where('class_group_id', $classGroup->id)
                 ->get();
 
+            $classGroupSchedules = ClassGroupSchedule::with('classGroup')
+                ->where('class_group_id', $classGroup->id)
+                ->orderByRaw("FIELD(day, 'monday','tuesday','wednesday','thursday','friday','saturday','sunday')")
+                ->get();
+
             // Transform data into a clean array
             $students = $classGroupStudents->map(function ($student) {
                 return [
@@ -47,7 +53,7 @@ class ClassGroupController extends Controller
                 ];
             });
             // dd($teachers);
-            return view('dashboard.teachers.class-groups.show', compact('classGroup', 'students'));
+            return view('dashboard.teachers.class-groups.show', compact('classGroup', 'students','classGroupSchedules'));
         } catch (\Throwable $th) {
             Log::error('Teachers Class Groups Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");

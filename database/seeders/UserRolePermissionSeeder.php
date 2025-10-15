@@ -62,6 +62,11 @@ class UserRolePermissionSeeder extends Seeder
         Permission::create(['name' => 'update class groups']);
         Permission::create(['name' => 'delete class groups']);
 
+        Permission::create(['name' => 'view class group schedules']);
+        Permission::create(['name' => 'create class group schedules']);
+        Permission::create(['name' => 'update class group schedules']);
+        Permission::create(['name' => 'delete class group schedules']);
+
         // Create Roles
         $superAdminRole = Role::create(['name' => 'super-admin']); //as super-admin
         $adminRole = Role::create(['name' => 'admin']);
