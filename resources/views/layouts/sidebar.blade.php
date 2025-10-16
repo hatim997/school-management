@@ -15,6 +15,18 @@
 
     <div class="menu-inner-shadow"></div>
 
+    @php
+        use Illuminate\Support\Str;
+        $roleTitle = Str::title(str_replace('-', ' ', Auth::user()->getRoleNames()->first()));
+    @endphp
+
+    <div class="text-center mt-3 mb-2 px-3">
+        <div class="border rounded-pill py-2 px-3 bg-label-primary text-primary fw-semibold shadow-sm small">
+            <i class="ti ti-user-shield me-1"></i>
+            {{ $roleTitle }} Portal
+        </div>
+    </div>
+
     <ul class="menu-inner py-1">
         <!-- Dashboards -->
         <li class="menu-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
@@ -46,6 +58,15 @@
                     </a>
                 </li>
             @endcan
+        @else
+            @can('view subject')
+                <li class="menu-item {{ request()->routeIs('dashboard.admin.subjects.*') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.admin.subjects.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-book"></i>
+                        <div>{{ __('Subjects') }}</div>
+                    </a>
+                </li>
+            @endcan
         @endrole
         @role('teacher')
             @can(['view class groups'])
@@ -53,6 +74,26 @@
                     <a href="{{ route('dashboard.class-groups.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-users-group"></i>
                         <div>{{ __('Class Groups') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('dashboard.teachers.upcoming-sessions') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.teachers.upcoming-sessions') }}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-calendar-clock"></i>
+                        <div>{{ __('Upcoming Sessions') }}</div>
+                    </a>
+                </li>
+                <li class="menu-item {{ request()->routeIs('dashboard.teachers.calendar') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.teachers.calendar') }}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-calendar-event"></i>
+                        <div>{{ __('Calendar') }}</div>
+                    </a>
+                </li>
+            @endcan
+            @can(['view attendance'])
+                <li class="menu-item {{ request()->routeIs('dashboard.teacher.attendances.*') ? 'active' : '' }}">
+                    <a href="{{ route('dashboard.teacher.attendances.index') }}" class="menu-link">
+                        <i class="menu-icon tf-icons ti ti-clock-check"></i>
+                        <div>{{ __('Attendance') }}</div>
                     </a>
                 </li>
             @endcan
@@ -69,14 +110,21 @@
         @role('student')
             <li class="menu-item {{ request()->routeIs('dashboard.students.enrolled-subjects.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.students.enrolled-subjects.index') }}" class="menu-link">
-                    <i class="menu-icon tf-icons ti ti-users-group"></i>
+                    <i class="menu-icon tf-icons ti ti-book"></i>
                     <div>{{ __('Enrolled Subjects') }}</div>
                 </a>
             </li>
             <li class="menu-item {{ request()->routeIs('dashboard.students.upcoming-classes.*') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.students.upcoming-classes.index') }}" class="menu-link">
-                    <i class="menu-icon tf-icons ti ti-users-group"></i>
+                    <i class="menu-icon tf-icons ti ti-calendar-clock"></i>
                     <div>{{ __('Upcoming Classes') }}</div>
+                </a>
+            </li>
+
+            <li class="menu-item {{ request()->routeIs('dashboard.students.calendar') ? 'active' : '' }}">
+                <a href="{{ route('dashboard.students.calendar') }}" class="menu-link">
+                    <i class="menu-icon tf-icons ti ti-calendar-event"></i>
+                    <div>{{ __('Calendar') }}</div>
                 </a>
             </li>
         @endrole

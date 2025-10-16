@@ -20,38 +20,29 @@
                 </div>
                 <div class="card-body">
                     <div class="row gy-6 mb-6">
-                        @if (isset($studentSubjects) && count($studentSubjects) > 0)
-                            @foreach ($studentSubjects as $studentSubject)
+                        @if (isset($classGroups) && count($classGroups) > 0)
+                            @foreach ($classGroups as $classGroup)
                                 <div class="col-sm-6 col-lg-4">
                                     <div class="card p-2 h-100 shadow-none border">
                                         <div class="rounded-2 text-center mb-4">
-                                            <a href="{{ route('dashboard.students.enrolled-subjects.show', $studentSubject->subject->id) }}"><img class="img-fluid"
-                                                    src="{{ $studentSubject->subject->image ? asset($studentSubject->subject->image) : asset('uploads/subjects/subject-default-image.jpg') }}"
-                                                    alt="{{ $studentSubject->subject->name }}" /></a>
+                                            <a href="{{ route('dashboard.students.enrolled-subjects.show', $classGroup->id) }}">
+                                                <img class="img-fluid" style="height: 180px; object-fit: cover;" src="{{ $classGroup->subject->image ? asset($classGroup->subject->image) : asset('uploads/subjects/subject-default-image.jpg') }}"
+                                                    alt="{{ $classGroup->subject->name }}" /></a>
                                         </div>
                                         <div class="card-body p-4 pt-2">
                                             <div class="d-flex justify-content-between align-items-center mb-4">
-                                                <span
-                                                    class="badge bg-label-primary">{{ $studentSubject->subject->code }}</span>
-                                                <p
-                                                    class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
-                                                    {{ $studentSubject->subject->rating }}
-                                                    <span class="text-warning"><i
-                                                            class="icon-base ti ti-star-filled icon-lg me-1 mb-1_5"></i></span><span
-                                                        class="fw-normal">({{ $studentSubject->subject->total_enrolled }})</span>
+                                                <span class="badge bg-label-primary">{{ $classGroup->name }}</span>
+                                                <p class="d-flex align-items-center mb-1">
+                                                    <i class="icon-base ti ti-clock me-1"></i>{{ $classGroup->subject->duration }}
+                                                    weeks
                                                 </p>
                                             </div>
-                                            <a href="app-academy-course-details.html"
-                                                class="h5">{{ $studentSubject->subject->name }}</a>
-                                            <p class="mt-1">{{ $studentSubject->subject->short_description }}</p>
-                                            <p class="d-flex align-items-center mb-1">
-                                                <i class="icon-base ti ti-clock me-1"></i>{{ $studentSubject->subject->duration }}
-                                                weeks
-                                            </p>
+                                            <a href="{{ route('dashboard.students.enrolled-subjects.show', $classGroup->id) }}"
+                                                class="h5">{{ $classGroup->subject->name }}</a>
                                             <div
                                                 class="d-flex flex-column flex-md-row gap-4 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
                                                 <a class="w-100 btn btn-info d-flex align-items-center"
-                                                    href="{{ route('dashboard.students.enrolled-subjects.show', $studentSubject->subject->id) }}">
+                                                    href="{{ route('dashboard.students.enrolled-subjects.show', $classGroup->id) }}">
                                                     <span class="me-2">View Details
                                                     </span><i class="icon-base ti ti-chevron-right icon-xs lh-1 scaleX-n1-rtl"></i>
                                                 </a>

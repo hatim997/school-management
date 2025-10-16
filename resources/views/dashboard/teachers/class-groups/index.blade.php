@@ -20,7 +20,7 @@
                             <th>{{ __('Sr.') }}</th>
                             <th>{{ __('Group Name') }}</th>
                             <th>{{ __('Subject') }}</th>
-                            <th>{{ __('Students Assigned') }}</th>
+                            <th>{{ __('Students') }}</th>
                             @canany(['view class groups'])<th>{{ __('Action') }}</th>@endcan
                         </tr>
                     </thead>
@@ -40,6 +40,14 @@
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
                                                     title="{{ __('View Class Group Details') }}">
                                                     <i class="ti ti-eye ti-md"></i>
+                                                </a>
+                                            </span>
+                                            <span class="text-nowrap">
+                                                <a href="{{ route('dashboard.class-groups.materials', $classGroup->id) }}"
+                                                    class="btn btn-icon btn-text-primary waves-effect waves-light rounded-pill me-1 edit-order-btn"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                    title="{{ __('View Class Group Materials') }}">
+                                                    <i class="ti ti-folder-open ti-md"></i>
                                                 </a>
                                             </span>
                                         @endcan

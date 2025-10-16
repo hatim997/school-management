@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
       inlineCalInstance;
 
     // Init event Offcanvas
-    const bsAddEventSidebar = new bootstrap.Offcanvas(addEventSidebar);
+    // const bsAddEventSidebar = new bootstrap.Offcanvas(addEventSidebar);
 
     //! TODO: Update Event label and guest code to JS once select removes jQuery dependency
     // Event Label (select2)

@@ -68,6 +68,7 @@ class ClassGroupScheduleController extends Controller
         try {
             DB::beginTransaction();
             $classGroupschedule = ClassGroupSchedule::where('class_group_id', $id)->where('day', $request->day)->first();
+            // dd($classGroupschedule);
             if (!$classGroupschedule) {
                 $classGroupschedule = new ClassGroupSchedule();
                 $classGroupschedule->class_group_id = $id;

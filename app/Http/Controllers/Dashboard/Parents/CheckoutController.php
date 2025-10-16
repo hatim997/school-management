@@ -23,8 +23,9 @@ class CheckoutController extends Controller
     {
         try {
             $subject = Subject::findOrFail($id);
+            $billing = Billing::where('user_id', auth()->user()->id)->first();
             $parentChildrens = ParentChild::with('child')->where('parent_id', auth()->user()->id)->get();
-            return view('dashboard.parents.subjects.checkout', compact('subject', 'parentChildrens'));
+            return view('dashboard.parents.subjects.checkout', compact('subject', 'parentChildrens','billing'));
         } catch (\Throwable $th) {
             Log::error('Checkout Index Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");

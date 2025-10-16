@@ -16,7 +16,7 @@
         <div class="card mb-6">
             <!-- Account -->
             <div class="card-body pt-4">
-                <form method="POST" action="{{ route('dashboard.class-group-schedules.update', $classGroupschedule->class_group_id) }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('dashboard.class-group-schedules.update', $classGroupschedule->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row p-5">

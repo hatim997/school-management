@@ -5,8 +5,10 @@ use App\Http\Controllers\Auth\GithubController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Dashboard\Admin\AttendanceController;
 use App\Http\Controllers\Dashboard\Admin\ClassGroupController as AdminClassGroupController;
 use App\Http\Controllers\Dashboard\Admin\ClassGroupScheduleController;
+use App\Http\Controllers\Dashboard\Admin\SubjectController as AdminSubjectController;
 use App\Http\Controllers\Dashboard\Admin\TeacherController;
 use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Dashboard\NotificationController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Dashboard\RolePermission\PermissionController;
 use App\Http\Controllers\Dashboard\RolePermission\RoleController;
 use App\Http\Controllers\Dashboard\SettingController;
 use App\Http\Controllers\Dashboard\Students\IndexController;
+use App\Http\Controllers\Dashboard\Teacher\AttendanceController as TeacherAttendanceController;
 use App\Http\Controllers\Dashboard\Teacher\ClassGroupController;
 use App\Http\Controllers\Dashboard\User\ArchivedUserController;
 use App\Http\Controllers\Dashboard\User\UserController;
@@ -160,6 +163,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('class-group-schedules/edit/{id}', [ClassGroupScheduleController::class, 'edit'])->name('class-group-schedules.edit');
             Route::put('class-group-schedules/update{id}', [ClassGroupScheduleController::class, 'update'])->name('class-group-schedules.update');
             Route::delete('class-group-schedules/delete{id}', [ClassGroupScheduleController::class, 'destroy'])->name('class-group-schedules.destroy');
+            Route::prefix('admin')->name('admin.')->group(function () {
+                Route::resource('subjects', AdminSubjectController::class);
+            });
+            Route::resource('attendances', AttendanceController::class);
 
             //Parents Routes
             Route::resource('children', ChildrenController::class);
@@ -169,11 +176,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
             //Teacher Routes
             Route::resource('class-groups', ClassGroupController::class);
+            Route::get('class-groups/{id}/materials', [ClassGroupController::class, 'classGroupMaterials'])->name('class-groups.materials');
+            Route::post('class-groups/{id}/materials/store', [ClassGroupController::class, 'storeClassGroupMaterials'])->name('class-groups.materials.store');
+            Route::get('teacher/upcoming-sessions', [ClassGroupController::class, 'upcomingSessions'])->name('teachers.upcoming-sessions');
+            Route::get('teacher/calendar', [ClassGroupController::class, 'teacherCalendar'])->name('teachers.calendar');
+            Route::prefix('teacher')->name('teacher.')->group(function () {
+                Route::get('/teacher/attendances/get-students', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendances.getStudents');
+                Route::resource('attendances', TeacherAttendanceController::class);
+            });
 
             //Student Routes
             Route::get('student/enrolled-subjects', [IndexController::class, 'enrolledSubjects'])->name('students.enrolled-subjects.index');
             Route::get('student/enrolled-subjects/{id}', [IndexController::class, 'enrolledSubjectShow'])->name('students.enrolled-subjects.show');
+            Route::post('/mark-attendance', [IndexController::class, 'markAttendance'])->name('students.attendance.mark');
             Route::get('student/upcoming-classes', [IndexController::class, 'upcomingClasses'])->name('students.upcoming-classes.index');
+            Route::get('student/calendar', [IndexController::class, 'studentCalendar'])->name('students.calendar');
 
         });
     });
