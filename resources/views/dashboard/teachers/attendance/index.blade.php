@@ -15,18 +15,20 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">My Class Group Attendances</h5>
-                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                    data-bs-target="#markAttendanceModal">
-                    <i class="ti ti-check"></i> Mark Attendance
-                </button>
-                <form method="GET" action="{{ route('dashboard.teacher.attendances.index') }}">
-                    <select name="filter" class="form-select form-select-sm" onchange="this.form.submit()">
-                        <option value="today" {{ $filter == 'today' ? 'selected' : '' }}>Today</option>
-                        <option value="week" {{ $filter == 'week' ? 'selected' : '' }}>This Week</option>
-                        <option value="month" {{ $filter == 'month' ? 'selected' : '' }}>This Month</option>
-                        <option value="overall" {{ $filter == 'overall' ? 'selected' : '' }}>Overall</option>
-                    </select>
-                </form>
+                <div class="d-flex justify-content-center align-items-center gap-2">
+                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#markAttendanceModal">
+                        <i class="ti ti-check"></i> Mark Attendance
+                    </button>
+                    <form method="GET" action="{{ route('dashboard.teacher.attendances.index') }}">
+                        <select name="filter" class="form-select form-select-sm" onchange="this.form.submit()">
+                            <option value="today" {{ $filter == 'today' ? 'selected' : '' }}>Today</option>
+                            <option value="week" {{ $filter == 'week' ? 'selected' : '' }}>This Week</option>
+                            <option value="month" {{ $filter == 'month' ? 'selected' : '' }}>This Month</option>
+                            <option value="overall" {{ $filter == 'overall' ? 'selected' : '' }}>Overall</option>
+                        </select>
+                    </form>
+                </div>
             </div>
             <div class="card-body">
                 @forelse ($classGroups as $group)
@@ -80,7 +82,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Select Group</label>
-                            <select name="class_group_id" id="groupSelect" class="form-select" required>
+                            <select name="class_group_id" id="groupSelect" class="form-select select2" required>
                                 <option value="">-- Select Group --</option>
                                 @foreach ($classGroups as $group)
                                     <option value="{{ $group->id }}">{{ $group->name }}
@@ -91,7 +93,7 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Select Student</label>
-                            <select name="student_id" id="studentSelect" class="form-select" required>
+                            <select name="student_id[]" id="studentSelect" class="form-select select2" multiple required>
                                 <option value="">-- Select Student --</option>
                             </select>
                         </div>
@@ -120,7 +122,7 @@
             $('#groupSelect').on('change', function() {
                 const groupId = $(this).val();
                 if (!groupId) {
-                    $('#studentSelect').html('<option value="">-- Select Student --</option>');
+                    $('#studentSelect').html('<option value="">-- Select Students --</option>');
                     return;
                 }
 
@@ -131,7 +133,7 @@
                         group_id: groupId
                     },
                     success: function(response) {
-                        let options = '<option value="">-- Select Student --</option>';
+                        let options = '<option value="">-- Select Students --</option>';
                         $.each(response.students, function(key, student) {
                             options +=
                                 `<option value="${student.id}">${student.name}</option>`;

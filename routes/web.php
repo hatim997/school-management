@@ -120,16 +120,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('profile/security/password/{id}', [ProfileController::class, 'passwordUpdate'])->name('update.password');
         Route::post('profile/update/teacher-info', [ProfileController::class, 'updateTeacherInfo'])->name('profile.update-teacher');
 
-        Route::get('/notifications', [NotificationController::class, 'index']);
-        Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead']);
-        Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead']);
-        Route::post('/notifications/{id}/delete', [NotificationController::class, 'deleteNotification']);
+        Route::get('/get/notifications', [NotificationController::class, 'getNotifications']);
+        Route::get('/notifications/click/{id}', [NotificationController::class, 'notificationClickHandle'])->name('notification.click');
+        Route::post('/notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::post('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+        Route::post('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.deleteAll');
+        Route::post('/notifications/{id}/delete', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
         Route::get('/notifications/send-test-noti/{id}', [NotificationController::class, 'testNotification']);
 
         Route::get('dashboard', [HomeController::class, 'index'])->name('dashboard');
 
         // Admin Dashboard Authentication Routes
         Route::prefix('dashboard')->name('dashboard.')->group(function () {
+            Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
 
             Route::resource('user', UserController::class);
             Route::resource('archived-user', ArchivedUserController::class);
@@ -181,7 +184,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('teacher/upcoming-sessions', [ClassGroupController::class, 'upcomingSessions'])->name('teachers.upcoming-sessions');
             Route::get('teacher/calendar', [ClassGroupController::class, 'teacherCalendar'])->name('teachers.calendar');
             Route::prefix('teacher')->name('teacher.')->group(function () {
-                Route::get('/teacher/attendances/get-students', [TeacherAttendanceController::class, 'getStudents'])->name('teacher.attendances.getStudents');
+                Route::get('/teacher/attendances/get-students', [TeacherAttendanceController::class, 'getStudents'])->name('attendances.getStudents');
                 Route::resource('attendances', TeacherAttendanceController::class);
             });
 

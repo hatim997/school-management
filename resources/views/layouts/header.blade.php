@@ -113,7 +113,7 @@
                     </li>
                     <li class="border-top">
                         <div class="d-grid p-4">
-                            <a class="btn btn-primary btn-sm d-flex" href="javascript:void(0);">
+                            <a class="btn btn-primary btn-sm d-flex" href="{{route('dashboard.notifications.index')}}">
                                 <small class="align-middle">{{ __('View all notifications') }}</small>
                             </a>
                         </div>

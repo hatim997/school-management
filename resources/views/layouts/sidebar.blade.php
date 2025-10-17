@@ -89,14 +89,14 @@
                     </a>
                 </li>
             @endcan
-            {{-- @can(['view attendance'])
+            @can(['view attendance'])
                 <li class="menu-item {{ request()->routeIs('dashboard.teacher.attendances.*') ? 'active' : '' }}">
                     <a href="{{ route('dashboard.teacher.attendances.index') }}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-clock-check"></i>
                         <div>{{ __('Attendance') }}</div>
                     </a>
                 </li>
-            @endcan --}}
+            @endcan
         @else
             @can(['view class groups'])
                 <li class="menu-item {{ request()->routeIs('dashboard.admin-class-groups.*') ? 'active' : '' }}">
