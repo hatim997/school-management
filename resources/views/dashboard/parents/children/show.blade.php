@@ -100,7 +100,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-xl-12 order-0 order-xl-0">
+                                        {{-- <div class="col-xl-12 order-0 order-xl-0">
                                             <div class="alert alert-warning" role="alert">
                                                 <h5 class="alert-heading mb-2">We need your attention!</h5>
                                                 <span>Your plan requires update</span>
@@ -115,7 +115,7 @@
                                                         aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                     @endforeach
                                 @endif
                             </div>

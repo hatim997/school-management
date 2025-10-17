@@ -21,7 +21,7 @@
                 </button>
             </div>
             <div class="card-body">
-                <div class="card-datatable table-responsive">
+                <div class="card-datatable table-responsive" style="overflow-x: hidden;">
                     @if (isset($classGroupMaterials) && count($classGroupMaterials) > 0)
                         <div class="row g-3">
                             @foreach ($classGroupMaterials as $material)

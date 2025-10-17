@@ -85,7 +85,7 @@
                                 class="text-danger">*</span>
                             <input class="form-control @error('name') is-invalid @enderror" type="text" id="name"
                                 name="name" required placeholder="{{ __('Enter name') }}" autofocus
-                                value="{{ old('name', $billing->name) }}" />
+                                value="{{ old('name', $billing?->name) }}" />
                             @error('name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -97,7 +97,7 @@
                             <label for="email" class="form-label">{{ __('Email') }}</label><span
                                 class="text-danger">*</span>
                             <input class="form-control @error('email') is-invalid @enderror" type="email" id="email"
-                                name="email" required placeholder="{{ __('Enter email') }}" value="{{ old('email', $billing->email) }}" />
+                                name="email" required placeholder="{{ __('Enter email') }}" value="{{ old('email', $billing?->email) }}" />
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -110,7 +110,7 @@
                                 class="text-danger">*</span>
                             <input class="form-control @error('phone') is-invalid @enderror" type="text" id="phone"
                                 name="phone" required placeholder="{{ __('Enter phone number') }}"
-                                value="{{ old('phone', $billing->phone) }}" />
+                                value="{{ old('phone', $billing?->phone) }}" />
                             @error('phone')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -123,7 +123,7 @@
                                 class="text-danger">*</span>
                             <input class="form-control @error('country') is-invalid @enderror" type="text" id="country"
                                 name="country" required placeholder="{{ __('Enter country') }}"
-                                value="{{ old('country', $billing->country) }}" />
+                                value="{{ old('country', $billing?->country) }}" />
                             @error('country')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -136,7 +136,7 @@
                                 class="text-danger">*</span>
                             <input class="form-control @error('state') is-invalid @enderror" type="text" id="state"
                                 name="state" required placeholder="{{ __('Enter state or province') }}"
-                                value="{{ old('state', $billing->state) }}" />
+                                value="{{ old('state', $billing?->state) }}" />
                             @error('state')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -148,7 +148,7 @@
                             <label for="city" class="form-label">{{ __('City') }}</label><span
                                 class="text-danger">*</span>
                             <input class="form-control @error('city') is-invalid @enderror" type="text" id="city"
-                                name="city" required placeholder="{{ __('Enter city') }}" value="{{ old('city', $billing->city) }}" />
+                                name="city" required placeholder="{{ __('Enter city') }}" value="{{ old('city', $billing?->city) }}" />
                             @error('city')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -161,7 +161,7 @@
                                 class="text-danger">*</span>
                             <input class="form-control @error('zip') is-invalid @enderror" type="text" id="zip"
                                 name="zip" required placeholder="{{ __('Enter ZIP / Postal Code') }}"
-                                value="{{ old('zip', $billing->zip) }}" />
+                                value="{{ old('zip', $billing?->zip) }}" />
                             @error('zip')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -174,7 +174,7 @@
                                 class="text-danger">*</span>
                             <input class="form-control @error('address') is-invalid @enderror" type="text" id="address"
                                 name="address" required placeholder="{{ __('Enter full address') }}"
-                                value="{{ old('address', $billing->address) }}" />
+                                value="{{ old('address', $billing?->address) }}" />
                             @error('address')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -216,7 +216,7 @@
                                             <input class="form-control @error('paymentCard') is-invalid @enderror"
                                                 type="text" id="paymentCard" name="paymentCard" required
                                                 placeholder="{{ __('1356 3215 6548 7898') }}" autofocus
-                                                value="{{ old('paymentCard', $billing->card_number) }}" />
+                                                value="{{ old('paymentCard', $billing?->card_number) }}" />
                                             @error('paymentCard')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -229,7 +229,7 @@
                                             <input class="form-control @error('paymentCardName') is-invalid @enderror"
                                                 type="text" id="paymentCardName" name="paymentCardName" required
                                                 placeholder="{{ __('i.e. John Doe') }}" autofocus
-                                                value="{{ old('paymentCardName', $billing->card_name) }}" />
+                                                value="{{ old('paymentCardName', $billing?->card_name) }}" />
                                             @error('paymentCardName')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -243,7 +243,7 @@
                                             <input class="form-control @error('paymentCardExpiryDate') is-invalid @enderror"
                                                 type="text" id="paymentCardExpiryDate" name="paymentCardExpiryDate"
                                                 required placeholder="{{ __('MM/YY') }}" autofocus
-                                                value="{{ old('paymentCardExpiryDate', $billing->card_exp) }}" />
+                                                value="{{ old('paymentCardExpiryDate', $billing?->card_exp) }}" />
                                             @error('paymentCardExpiryDate')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>
@@ -256,7 +256,7 @@
                                             <input class="form-control @error('paymentCardCvv') is-invalid @enderror"
                                                 type="text" id="paymentCardCvv" name="paymentCardCvv" required
                                                 placeholder="{{ __('654') }}" autofocus
-                                                value="{{ old('paymentCardCvv', $billing->card_cvv) }}" />
+                                                value="{{ old('paymentCardCvv', $billing?->card_cvv) }}" />
                                             @error('paymentCardCvv')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>

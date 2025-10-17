@@ -48,7 +48,7 @@ class IndexController extends Controller
                 'schedules',
             ])
             ->findOrFail($id);
-            $classGroupMaterials = ClassGroupMaterial::where('class_group_id', $classGroup->id)->get();
+            $classGroupMaterials = ClassGroupMaterial::with('user')->where('class_group_id', $classGroup->id)->get();
             return view('dashboard.students.enrolled_subject_details', compact('classGroup','classGroupMaterials'));
         } catch (\Throwable $th) {
             Log::error('Students Enrolled Subjects Failed', ['error' => $th->getMessage()]);

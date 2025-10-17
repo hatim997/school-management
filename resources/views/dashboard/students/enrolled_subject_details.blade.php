@@ -27,44 +27,6 @@
         <!-- Order Details Table -->
 
         <div class="row">
-            {{-- <div class="col-6 col-lg-6">
-                <div class="card mb-6">
-                    <div class="card-header">
-                        <h5>Students in {{ $classGroup->name }}</h5>
-                    </div>
-                    <div class="card-datatable">
-                        <table class="datatables-users table border-top">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Sr.') }}</th>
-                                    <th>{{ __('Student') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($students as $index => $student)
-                                    <tr>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-start align-items-center mb-6">
-                                                <div class="avatar me-3">
-                                                    <img src="{{ $student['child_image'] }}" alt="Avatar"
-                                                        class="rounded-circle" />
-                                                </div>
-                                                <div class="d-flex flex-column">
-                                                    <a href="#" class="text-body text-nowrap">
-                                                        <h6 class="mb-0">{{ $student['child_name'] }}</h6>
-                                                    </a>
-                                                    <span>{{ $student['parent_name'] }}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> --}}
             <div class="col-12 col-lg-6">
                 <div class="card mb-6">
                     <div class="card-header">
@@ -133,7 +95,10 @@
                                     </li>
                                 @endforeach
                             @else
-                                <span>No Schedule Available at the Moment</span>
+                                <div class="text-center py-4">
+                                    <i class="ti ti-clock text-muted" style="font-size: 48px;"></i>
+                                    <p class="mt-2 text-muted">No Schedule Available</p>
+                                </div>
                             @endif
                         </ul>
                     </div>
@@ -198,7 +163,7 @@
                         <h5>Group Materials</h5>
                     </div>
                     <div class="card-body">
-                        <div class="card-datatable table-responsive">
+                        <div class="card-datatable table-responsive" style="overflow-x: hidden;">
                             @if (isset($classGroupMaterials) && count($classGroupMaterials) > 0)
                                 <div class="row g-3">
                                     @foreach ($classGroupMaterials as $material)

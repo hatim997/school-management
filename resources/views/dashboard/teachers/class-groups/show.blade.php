@@ -91,8 +91,90 @@
                                         </div>
                                     </li>
                                 @endforeach
+                            @else
+                                <div class="text-center py-4">
+                                    <i class="ti ti-clock text-muted" style="font-size: 48px;"></i>
+                                    <p class="mt-2 text-muted">No Schedule Available</p>
+                                </div>
                             @endif
                         </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Group Materials</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-datatable table-responsive" style="overflow-x: hidden;">
+                            @if (isset($classGroupMaterials) && count($classGroupMaterials) > 0)
+                                <div class="row g-3">
+                                    @foreach ($classGroupMaterials as $material)
+                                        @php
+                                            // Detect file type for icon
+                                            $icon = 'ti ti-file';
+                                            if (Str::contains($material->file_type, 'pdf')) {
+                                                $icon = 'ti ti-file-text text-danger';
+                                            } elseif (Str::contains($material->file_type, 'image')) {
+                                                $icon = 'ti ti-photo text-success';
+                                            } elseif (Str::contains($material->file_type, 'word')) {
+                                                $icon = 'ti ti-file-description text-primary';
+                                            } elseif (
+                                                Str::contains($material->file_type, 'excel') ||
+                                                Str::contains($material->file_type, 'spreadsheet')
+                                            ) {
+                                                $icon = 'ti ti-file-spreadsheet text-success';
+                                            } elseif (Str::contains($material->file_type, 'video')) {
+                                                $icon = 'ti ti-video text-warning';
+                                            } elseif (Str::contains($material->file_type, 'audio')) {
+                                                $icon = 'ti ti-music text-info';
+                                            } elseif (Str::contains($material->file_type, 'zip')) {
+                                                $icon = 'ti ti-file-zip text-secondary';
+                                            }
+                                        @endphp
+
+                                        <div class="col-sm-6 col-lg-4">
+                                            <div class="card p-3 h-100 border shadow-sm">
+                                                <div class="text-center mb-3">
+                                                    <i class="{{ $icon }}" style="font-size: 48px;"></i>
+                                                </div>
+
+                                                <div class="card-body p-2">
+                                                    <h6 class="fw-bold text-primary mb-2 text-truncate">
+                                                        {{ $material->file_name }}
+                                                    </h6>
+
+                                                    <ul class="list-unstyled small mb-3">
+                                                        <li><strong>Type:</strong> {{ $material->file_type }}</li>
+                                                        <li><strong>Size:</strong>
+                                                            {{ \App\Helpers\Helper::humanReadableSize($material->file_size) }}
+                                                        </li>
+                                                        <li><strong>Uploaded By:</strong>
+                                                            {{ $material->user->name ?? 'Unknown' }}
+                                                        </li>
+                                                        <li><strong>Date:</strong>
+                                                            {{ $material->created_at->format('d M, Y') }}
+                                                        </li>
+                                                    </ul>
+
+                                                    <a href="{{ asset($material->file) }}" target="_blank"
+                                                        class="btn btn-sm btn-primary w-100">
+                                                        <i class="ti ti-eye me-1"></i> Preview / Download
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="text-center py-4">
+                                    <i class="ti ti-folder-off text-muted" style="font-size: 48px;"></i>
+                                    <p class="mt-2 text-muted">No Materials Available</p>
+                                </div>
+                            @endif
+                        </div>
+
                     </div>
                 </div>
             </div>

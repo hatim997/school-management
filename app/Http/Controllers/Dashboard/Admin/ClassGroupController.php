@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\ClassGroup;
+use App\Models\ClassGroupMaterial;
 use App\Models\ClassGroupSchedule;
 use App\Models\ClassGroupStudent;
 use Illuminate\Http\Request;
@@ -71,8 +72,10 @@ class ClassGroupController extends Controller
                     'parent_name'    => $student->parentChild->parent->name ?? 'N/A',
                 ];
             });
+
+            $classGroupMaterials = ClassGroupMaterial::with('user')->where('class_group_id', $classGroup->id)->get();
             // dd($teachers);
-            return view('dashboard.admin.class-groups.show', compact('classGroup', 'students','classGroupSchedules'));
+            return view('dashboard.admin.class-groups.show', compact('classGroup', 'students','classGroupSchedules','classGroupMaterials'));
         } catch (\Throwable $th) {
             Log::error('Teachers Class Groups Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
