@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\GithubController;
 use App\Http\Controllers\Auth\GoogleController;
@@ -62,6 +63,11 @@ Route::get('/current-time', function () {
         'time' => Carbon::now()->format('h:iA') // Returns time in 12-hour format with AM/PM
     ]);
 });
+
+Route::get('/helper/format-currency', function (Illuminate\Http\Request $request) {
+    $amount = $request->get('amount', 0);
+    return Helper::formatCurrency($amount);
+})->name('helper.formatCurrency');
 
 Auth::routes();
 Route::get('/', function () {

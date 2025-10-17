@@ -22,7 +22,7 @@ class SendPreClassAlertJob implements ShouldQueue
         $schedules = ClassGroupSchedule::with([
             'classGroup.teacher',
             'classGroup.subject',
-            'classGroup.students.parentChild.child',
+            'classGroup.classGroupStudents.parentChild.child',
             ])
             ->where('day', $today)
             ->whereTime('start_time', '>=', $now->format('H:i:s'))
@@ -44,7 +44,7 @@ class SendPreClassAlertJob implements ShouldQueue
                     $classId
                 );
             }
-            foreach ($schedule->classGroup->students as $student) {
+            foreach ($schedule->classGroup->classGroupStudents as $student) {
                 $child = $student->parentChild->child;
                 $className = $schedule->classGroup->name;
                 $subjectName = $schedule->classGroup->subject->name;

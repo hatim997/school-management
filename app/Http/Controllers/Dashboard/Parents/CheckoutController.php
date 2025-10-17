@@ -11,6 +11,8 @@ use App\Models\ParentChild;
 use App\Models\Payment;
 use App\Models\Subject;
 use App\Models\TeacherSubject;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -86,6 +88,30 @@ class CheckoutController extends Controller
             // --- 3️⃣ Check or Create Class Group ---
             $subjectId = $request->subject_id;
             $child = ParentChild::findOrFail($request->child_id);
+            $childUser = User::with('profile')->findOrFail($child->child_id);
+            $subject = Subject::findOrFail($subjectId);
+
+            $alreadyEnrolled = ClassGroupStudent::where('parent_child_id', $child->id)
+                ->whereHas('classGroup', function ($q) use ($subjectId) {
+                    $q->where('subject_id', $subjectId);
+                })
+                ->exists();
+
+            if ($alreadyEnrolled) {
+                return redirect()->back()
+                    ->withInput($request->all())
+                    ->with('error', "This student is already enrolled in a group for {$subject->name}.");
+            }
+
+            // Calculate child's age from DOB
+            $childAge = Carbon::parse($childUser->profile->dob)->age;
+
+            // Check if student's age is within subject range
+            if ($childAge < $subject->from_age || $childAge > $subject->to_age) {
+                return redirect()->back()
+                    ->withInput($request->all())
+                    ->with('error', "This course is only for ages {$subject->from_age} to {$subject->to_age}. Your child's age is {$childAge}, which is not eligible.");
+            }
 
             // Find existing class group with available capacity
             $classGroup = ClassGroup::where('subject_id', $subjectId)

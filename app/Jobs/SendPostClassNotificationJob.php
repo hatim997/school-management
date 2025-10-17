@@ -23,7 +23,7 @@ class SendPostClassNotificationJob implements ShouldQueue
         $schedules = ClassGroupSchedule::with([
             'classGroup.subject',
             'classGroup.teacher',
-            'classGroup.students.parentChild.child',
+            'classGroup.classGroupStudents.parentChild.child',
         ])
         ->where('day', $today)
         ->whereTime('end_time', '<=', $now->format('H:i:s'))
@@ -60,7 +60,7 @@ class SendPostClassNotificationJob implements ShouldQueue
             }
 
             // --- 👩‍🎓 2. Notify students who missed attendance ---
-            foreach ($classGroup->students as $student) {
+            foreach ($classGroup->classGroupStudents as $student) {
                 $child = $student->parentChild->child ?? null;
                 if (!$child) continue;
 

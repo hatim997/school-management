@@ -11,6 +11,34 @@
 @endsection
 @section('content')
     <div class="container-xxl flex-grow-1 container-p-y">
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="ti ti-alert-circle fs-4 me-2"></i>
+                    <div>
+                        {{ session('error') }}
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show mb-4 shadow-sm" role="alert">
+                <div class="d-flex align-items-start">
+                    <i class="ti ti-alert-triangle fs-4 me-2 mt-1"></i>
+                    <div>
+                        <strong>Please fix the following errors:</strong>
+                        <ul class="mb-0 mt-1 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
         <form action="{{ route('dashboard.checkout.submit') }}" method="POST">
             @csrf
             <input type="hidden" name="payment_method" id="payment_method" value="card">
@@ -97,7 +125,8 @@
                             <label for="email" class="form-label">{{ __('Email') }}</label><span
                                 class="text-danger">*</span>
                             <input class="form-control @error('email') is-invalid @enderror" type="email" id="email"
-                                name="email" required placeholder="{{ __('Enter email') }}" value="{{ old('email', $billing?->email) }}" />
+                                name="email" required placeholder="{{ __('Enter email') }}"
+                                value="{{ old('email', $billing?->email) }}" />
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -121,8 +150,8 @@
                         <div class="mb-4 col-md-6">
                             <label for="country" class="form-label">{{ __('Country') }}</label><span
                                 class="text-danger">*</span>
-                            <input class="form-control @error('country') is-invalid @enderror" type="text" id="country"
-                                name="country" required placeholder="{{ __('Enter country') }}"
+                            <input class="form-control @error('country') is-invalid @enderror" type="text"
+                                id="country" name="country" required placeholder="{{ __('Enter country') }}"
                                 value="{{ old('country', $billing?->country) }}" />
                             @error('country')
                                 <span class="invalid-feedback" role="alert">
@@ -134,8 +163,8 @@
                         <div class="mb-4 col-md-4">
                             <label for="state" class="form-label">{{ __('State / Province') }}</label><span
                                 class="text-danger">*</span>
-                            <input class="form-control @error('state') is-invalid @enderror" type="text" id="state"
-                                name="state" required placeholder="{{ __('Enter state or province') }}"
+                            <input class="form-control @error('state') is-invalid @enderror" type="text"
+                                id="state" name="state" required placeholder="{{ __('Enter state or province') }}"
                                 value="{{ old('state', $billing?->state) }}" />
                             @error('state')
                                 <span class="invalid-feedback" role="alert">
@@ -148,7 +177,8 @@
                             <label for="city" class="form-label">{{ __('City') }}</label><span
                                 class="text-danger">*</span>
                             <input class="form-control @error('city') is-invalid @enderror" type="text" id="city"
-                                name="city" required placeholder="{{ __('Enter city') }}" value="{{ old('city', $billing?->city) }}" />
+                                name="city" required placeholder="{{ __('Enter city') }}"
+                                value="{{ old('city', $billing?->city) }}" />
                             @error('city')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
@@ -172,8 +202,8 @@
                         <div class="mb-4 col-md-12">
                             <label for="address" class="form-label">{{ __('Address') }}</label><span
                                 class="text-danger">*</span>
-                            <input class="form-control @error('address') is-invalid @enderror" type="text" id="address"
-                                name="address" required placeholder="{{ __('Enter full address') }}"
+                            <input class="form-control @error('address') is-invalid @enderror" type="text"
+                                id="address" name="address" required placeholder="{{ __('Enter full address') }}"
                                 value="{{ old('address', $billing?->address) }}" />
                             @error('address')
                                 <span class="invalid-feedback" role="alert">
@@ -211,7 +241,8 @@
                                     aria-labelledby="pills-cc-tab">
                                     <div class="row g-6">
                                         <div class="col-md-12">
-                                            <label for="paymentCard" class="form-label">{{ __('Card Number') }}</label><span
+                                            <label for="paymentCard"
+                                                class="form-label">{{ __('Card Number') }}</label><span
                                                 class="text-danger">*</span>
                                             <input class="form-control @error('paymentCard') is-invalid @enderror"
                                                 type="text" id="paymentCard" name="paymentCard" required
@@ -224,7 +255,8 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="paymentCardName" class="form-label">{{ __('Name') }}</label><span
+                                            <label for="paymentCardName"
+                                                class="form-label">{{ __('Name') }}</label><span
                                                 class="text-danger">*</span>
                                             <input class="form-control @error('paymentCardName') is-invalid @enderror"
                                                 type="text" id="paymentCardName" name="paymentCardName" required
@@ -240,7 +272,8 @@
                                             <label for="paymentCardExpiryDate"
                                                 class="form-label">{{ __('Exp. Date') }}</label><span
                                                 class="text-danger">*</span>
-                                            <input class="form-control @error('paymentCardExpiryDate') is-invalid @enderror"
+                                            <input
+                                                class="form-control @error('paymentCardExpiryDate') is-invalid @enderror"
                                                 type="text" id="paymentCardExpiryDate" name="paymentCardExpiryDate"
                                                 required placeholder="{{ __('MM/YY') }}" autofocus
                                                 value="{{ old('paymentCardExpiryDate', $billing?->card_exp) }}" />
@@ -251,7 +284,8 @@
                                             @enderror
                                         </div>
                                         <div class="col-md-4">
-                                            <label for="paymentCardCvv" class="form-label">{{ __('CVV Code') }}</label><span
+                                            <label for="paymentCardCvv"
+                                                class="form-label">{{ __('CVV Code') }}</label><span
                                                 class="text-danger">*</span>
                                             <input class="form-control @error('paymentCardCvv') is-invalid @enderror"
                                                 type="text" id="paymentCardCvv" name="paymentCardCvv" required
@@ -268,7 +302,8 @@
                                             <div class="form-check form-switch mt-2">
                                                 <input type="checkbox" name="cardFutureBilling" class="form-check-input"
                                                     id="cardFutureBilling" />
-                                                <label for="cardFutureBilling" class="form-check-label">Save card for future
+                                                <label for="cardFutureBilling" class="form-check-label">Save card for
+                                                    future
                                                     billing?</label>
                                             </div>
                                         </div>
