@@ -13,6 +13,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        // Daily reminders every morning 7 AM
+        $schedule->job(new \App\Jobs\SendDailyScheduleReminderJob)->dailyAt('07:00');
+
+        // Pre-class alerts every minute (checks classes starting within 15 min)
+        $schedule->job(new \App\Jobs\SendPreClassAlertJob)->everyMinute();
+
+        // Post-class notifications every 30 minutes
+        $schedule->job(new \App\Jobs\SendPostClassNotificationJob)->everyThirtyMinutes();
     }
 
     /**

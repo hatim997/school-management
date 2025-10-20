@@ -128,11 +128,11 @@
                     return new Date(date).toLocaleString(); // fallback to default date
                 }
             }
-
+            const notificationViewRoute = @json(route('notification.click', ['id' => '__id__']));
             // Fetch notifications
             function fetchNotifications() {
                 $.ajax({
-                    url: '/notifications',
+                    url: '/get/notifications',
                     type: 'GET',
                     dataType: 'json',
                     success: function(response) {
@@ -140,37 +140,43 @@
                         const notifications = response.notifications;
                         notificationDropdown.empty(); // Clear existing notifications
 
-                        let unreadCount = 0;
+                        let unreadCount = response.unreadNotificationsCount;
 
                         if (notifications.length === 0) {
                             notificationDropdown.append(
                                 '<li class="list-group-item text-center text-muted">No notifications</li>'
-                                );
+                            );
                         } else {
                             $.each(notifications, function(index, notification) {
-                                if (!notification.read_at) {
-                                    unreadCount++; // Count unread notifications
-                                }
+                                // if (!notification.read_at) {
+                                //     unreadCount++; // Count unread notifications
+                                // }
+                                const link = notification.table_name !== null ?
+                                    notificationViewRoute.replace('__id__', notification.id) :
+                                    'javascript:void(0)';
 
                                 const notificationItem = `
-                        <li class="list-group-item list-group-item-action dropdown-notifications-item ${notification.read_at ? 'marked-as-read' : ''}">
-                            <div class="d-flex">
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1 small">${notification.message}</h6>
-                                    <small class="text-muted">${timeAgo(notification.created_at)}</small>
-                                </div>
-                                <div class="flex-shrink-0 dropdown-notifications-actions">
-                                    <a href="javascript:void(0)" class="dropdown-notifications-read" data-id="${notification.id}">
-                                        <span class="badge badge-dot"></span>
-                                    </a>
-                                    <a href="javascript:void(0)" class="dropdown-notifications-archive" data-id="${notification.id}">
-                                        <span class="ti ti-x"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </li>
-                    `;
+                                    <li class="list-group-item list-group-item-action dropdown-notifications-item ${notification.read_at ? 'marked-as-read' : ''}">
+                                        <div class="d-flex">
+                                            <a href="${link}">
+                                                <div class="flex-grow-1">
+                                                    <h6 class="mb-1 small">${notification.message}</h6>
+                                                    <small class="text-muted">${timeAgo(notification.created_at)}</small>
+                                                </div>
+                                            </a>
+                                            <div class="flex-shrink-0 dropdown-notifications-actions">
+                                                <a href="javascript:void(0)" class="dropdown-notifications-read" data-id="${notification.id}">
+                                                    <span class="badge badge-dot"></span>
+                                                </a>
+                                                <a href="javascript:void(0)" class="dropdown-notifications-archive" data-id="${notification.id}">
+                                                    <span class="ti ti-x"></span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                `;
                                 notificationDropdown.append(notificationItem);
+
                             });
                         }
 

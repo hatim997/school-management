@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('short_description')->nullable();
             $table->text('description')->nullable();
+            $table->integer('from_age');
+            $table->integer('to_age');
             $table->integer('rating')->default(5);
             $table->integer('total_enrolled')->default(0);
             $table->enum('is_coming', ['0', '1'])->default('0');

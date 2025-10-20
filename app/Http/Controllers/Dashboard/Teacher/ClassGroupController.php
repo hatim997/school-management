@@ -56,8 +56,9 @@ class ClassGroupController extends Controller
                     'parent_name'    => $student->parentChild->parent->name ?? 'N/A',
                 ];
             });
+            $classGroupMaterials = ClassGroupMaterial::with('user')->where('class_group_id', $classGroup->id)->get();
             // dd($teachers);
-            return view('dashboard.teachers.class-groups.show', compact('classGroup', 'students', 'classGroupSchedules'));
+            return view('dashboard.teachers.class-groups.show', compact('classGroup', 'students', 'classGroupSchedules','classGroupMaterials'));
         } catch (\Throwable $th) {
             Log::error('Teachers Class Groups Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");

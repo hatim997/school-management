@@ -1,5 +1,5 @@
 <!-- Activity Timeline -->
-<div class="card card-action mb-6">
+{{-- <div class="card card-action mb-6">
     <div class="card-header align-items-center">
         <h5 class="card-action-title mb-0">
             <i class="ti ti-chart-bar ti-lg text-body me-4"></i>Activity Timeline
@@ -85,5 +85,5 @@
             </li>
         </ul>
     </div>
-</div>
+</div> --}}
 <!--/ Activity Timeline -->

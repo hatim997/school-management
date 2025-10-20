@@ -82,12 +82,12 @@
                         <div>{{ __('Upcoming Sessions') }}</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('dashboard.teachers.calendar') ? 'active' : '' }}">
+                {{-- <li class="menu-item {{ request()->routeIs('dashboard.teachers.calendar') ? 'active' : '' }}">
                     <a href="{{ route('dashboard.teachers.calendar') }}" class="menu-link">
                         <i class="menu-icon tf-icons ti ti-calendar-event"></i>
                         <div>{{ __('Calendar') }}</div>
                     </a>
-                </li>
+                </li> --}}
             @endcan
             @can(['view attendance'])
                 <li class="menu-item {{ request()->routeIs('dashboard.teacher.attendances.*') ? 'active' : '' }}">
@@ -121,12 +121,12 @@
                 </a>
             </li>
 
-            <li class="menu-item {{ request()->routeIs('dashboard.students.calendar') ? 'active' : '' }}">
+            {{-- <li class="menu-item {{ request()->routeIs('dashboard.students.calendar') ? 'active' : '' }}">
                 <a href="{{ route('dashboard.students.calendar') }}" class="menu-link">
                     <i class="menu-icon tf-icons ti ti-calendar-event"></i>
                     <div>{{ __('Calendar') }}</div>
                 </a>
-            </li>
+            </li> --}}
         @endrole
         @can(['view teacher'])
             <li class="menu-item {{ request()->routeIs('dashboard.teachers.*') ? 'active' : '' }}">
