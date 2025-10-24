@@ -80,7 +80,7 @@ class Helper
             return $symbol . $amount;
         }
 
-        return $amount . $symbol;
+        return number_format($amount, 2) . $symbol;
     }
 
     public static function renderRecaptcha($formId, $action = 'register')
