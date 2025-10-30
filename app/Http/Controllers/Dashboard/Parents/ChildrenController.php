@@ -24,6 +24,8 @@ use App\Models\TeacherSubject;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Stripe\Stripe;
+use Stripe\Charge;
 
 class ChildrenController extends Controller
 {
@@ -53,7 +55,7 @@ class ChildrenController extends Controller
             $subjects = Subject::where('is_active', 'active')->get();
             $billing = Billing::where('user_id', auth()->user()->id)->first();
             $genders = Gender::where('is_active', 'active')->get();
-            return view('dashboard.parents.children.create', compact('genders','subjects','billing'));
+            return view('dashboard.parents.children.create', compact('genders', 'subjects', 'billing'));
         } catch (\Throwable $th) {
             Log::error('Children Create Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
@@ -70,12 +72,14 @@ class ChildrenController extends Controller
         $validator = Validator::make($request->all(), [
             // Child required fields
             'child_name' => 'required|string|max:255',
-            'child_email' => 'required|email|unique:users,email',
+            // 'child_email' => 'required|email|unique:users,email',
+            'username' => 'required|string|unique:users,username',
+            'password' => 'required|string|min:6',
             'dob' => 'required|date',
             'gender_id' => 'required|exists:genders,id',
 
             // Base required fields
-            'payment_method' => 'required|in:card,paypal',
+            'payment_method' => 'required|in:card,paypal,stripe',
             'subject_id' => 'required|exists:subjects,id',
             'amount' => 'required|string|max:255',
 
@@ -94,6 +98,8 @@ class ChildrenController extends Controller
             'paymentCardName' => 'required_if:payment_method,card|nullable|string|max:255',
             'paymentCardExpiryDate' => "required_if:payment_method,card|nullable|string",
             'paymentCardCvv' => 'required_if:payment_method,card|nullable|digits_between:3,4',
+
+            'stripeToken' => 'required_if:payment_method,stripe|nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -181,20 +187,56 @@ class ChildrenController extends Controller
                 $classGroup->save();
             }
 
-            $plainPassword = Str::random(8) . substr(str_shuffle('!@#$%^&*'), 0, 2);
-            $plainPassword = substr(str_shuffle($plainPassword), 0, 8);
+            if ($request->payment_method === 'stripe') {
+                Stripe::setApiKey(env('STRIPE_SECRET'));
+
+                try {
+                    $charge = Charge::create([
+                        'amount' => $request->amount * 100, // Convert to cents
+                        'currency' => 'usd',
+                        'source' => $request->stripeToken,
+                        'description' => 'Child enrollment payment for subject ID: ' . $request->subject_id,
+                        'receipt_email' => auth()->user()->email, // Billing email
+                        'metadata' => [
+                            'parent_id' => auth()->id(),
+                            'parent_name' => auth()->user()->name,
+                            'billing_name' => $request->name,
+                            'billing_email' => $request->email,
+                            'billing_phone' => $request->phone,
+                            'billing_address' => $request->address,
+                            'subject_id' => $request->subject_id,
+                        ],
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::error('Stripe Charge Failed', ['error' => $e->getMessage()]);
+                    return back()->with('error', 'Payment could not be processed: ' . $e->getMessage());
+                }
+
+                if ($charge->status !== 'succeeded') {
+                    DB::rollBack();
+                    Log::error('Stripe Payment Failed', ['charge' => $charge]);
+                    return back()->with('error', 'Payment failed. Please try again.');
+                }
+            }
 
             $child = new User();
             $child->name = $request->child_name;
-            $child->email = $request->child_email;
-            $child->password = Hash::make($plainPassword);
-            $child->email_verified_at = now();
-            $username = $this->generateUsername($request->name);
+            do {
+                $randomId = mt_rand(10000, 99999); // generates a random 5-digit number
+                $email = "email.$randomId@gmail.com";
+            } while (User::where('email', $email)->exists()); // ensure uniqueness
 
-            while (User::where('username', $username)->exists()) {
-                $username = $this->generateUsername($request->name);
-            }
-            $child->username = $username;
+            $child->email = $email;
+            $child->username = $request->username;
+            $child->password = Hash::make($request->password);
+            $child->email_verified_at = now();
+            // $username = $this->generateUsername($request->name);
+
+            // while (User::where('username', $username)->exists()) {
+            //     $username = $this->generateUsername($request->name);
+            // }
+            // $child->username = $username;
             $child->save();
 
             $child->assignRole('student');
@@ -210,7 +252,7 @@ class ChildrenController extends Controller
             $parentChild = new ParentChild();
             $parentChild->parent_id = Auth::user()->id;
             $parentChild->child_id = $child->id;
-            $parentChild->temp_pass = $plainPassword;
+            $parentChild->temp_pass = $request->password;
             $parentChild->save();
 
             // --- 4️⃣ Add Student to Class Group ---
@@ -225,8 +267,7 @@ class ChildrenController extends Controller
             $childSubject->save();
 
             $payment = new Payment();
-            $tempTransactionId = 'TRANS-' . date('Y') . '-' . uniqid();
-            $payment->transaction_id = $tempTransactionId;
+            $payment->transaction_id = $charge->id;
             $payment->parent_child_id = $parentChild->id;
             $payment->subject_id = $request->subject_id;
             $payment->billing_id = $billing->id;
@@ -234,14 +275,12 @@ class ChildrenController extends Controller
             $payment->amount = $request->amount;
             $payment->payment_status = 'success';
             $payment->save();
-            $payment->transaction_id = 'TRANS-' . date('Y') . '-' . str_pad($payment->id, 6, '0', STR_PAD_LEFT);
-            $payment->save();
 
             $childData = (object) [
                 'parent_name' => Auth::user()->name,
                 'child_name' => $child->name,
                 'child_email' => $child->email,
-                'temp_pass' => $plainPassword,
+                'temp_pass' => $request->password,
             ];
 
             try {
@@ -254,6 +293,7 @@ class ChildrenController extends Controller
             DB::commit();
             return redirect()->route('dashboard.children.index')->with('success', 'Child created successfully');
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error('Children Store Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
             throw $th;

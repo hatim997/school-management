@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Stripe\Stripe;
+use Stripe\Charge;
 
 class CheckoutController extends Controller
 {
@@ -39,7 +41,7 @@ class CheckoutController extends Controller
     {
         $validator = Validator::make($request->all(), [
             // Base required fields
-            'payment_method' => 'required|in:card,paypal',
+            'payment_method' => 'required|in:card,paypal,stripe',
             'child_id' => 'required|exists:parent_children,id',
             'subject_id' => 'required|exists:subjects,id',
             'amount' => 'required|string|max:255',
@@ -59,6 +61,8 @@ class CheckoutController extends Controller
             'paymentCardName' => 'required_if:payment_method,card|nullable|string|max:255',
             'paymentCardExpiryDate' => "required_if:payment_method,card|nullable|string",
             'paymentCardCvv' => 'required_if:payment_method,card|nullable|digits_between:3,4',
+
+            'stripeToken' => 'required_if:payment_method,stripe|nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -159,6 +163,39 @@ class CheckoutController extends Controller
                 $classGroup->save();
             }
 
+            if ($request->payment_method === 'stripe') {
+                Stripe::setApiKey(env('STRIPE_SECRET'));
+
+                try {
+                    $charge = Charge::create([
+                        'amount' => $request->amount * 100, // Convert to cents
+                        'currency' => 'usd',
+                        'source' => $request->stripeToken,
+                        'description' => 'Child enrollment payment for subject ID: ' . $request->subject_id,
+                        'receipt_email' => auth()->user()->email, // Billing email
+                        'metadata' => [
+                            'parent_id' => auth()->id(),
+                            'parent_name' => auth()->user()->name,
+                            'billing_name' => $request->name,
+                            'billing_email' => $request->email,
+                            'billing_phone' => $request->phone,
+                            'billing_address' => $request->address,
+                            'subject_id' => $request->subject_id,
+                        ],
+                    ]);
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    Log::error('Stripe Charge Failed', ['error' => $e->getMessage()]);
+                    return back()->with('error', 'Payment could not be processed: ' . $e->getMessage());
+                }
+
+                if ($charge->status !== 'succeeded') {
+                    DB::rollBack();
+                    Log::error('Stripe Payment Failed', ['charge' => $charge]);
+                    return back()->with('error', 'Payment failed. Please try again.');
+                }
+            }
+
             // --- 4️⃣ Add Student to Class Group ---
             $classGroupStudent = new ClassGroupStudent();
             $classGroupStudent->class_group_id = $classGroup->id;
@@ -171,8 +208,7 @@ class CheckoutController extends Controller
             $childSubject->save();
 
             $payment = new Payment();
-            $tempTransactionId = 'TRANS-' . date('Y') . '-' . uniqid();
-            $payment->transaction_id = $tempTransactionId;
+            $payment->transaction_id = $charge->id;
             $payment->parent_child_id = $request->child_id;
             $payment->subject_id = $request->subject_id;
             $payment->billing_id = $billing->id;
@@ -180,8 +216,7 @@ class CheckoutController extends Controller
             $payment->amount = $request->amount;
             $payment->payment_status = 'success';
             $payment->save();
-            $payment->transaction_id = 'TRANS-' . date('Y') . '-' . str_pad($payment->id, 6, '0', STR_PAD_LEFT);
-            $payment->save();
+            
             DB::commit();
             return redirect()->route('dashboard.subjects.index')->with('success', "Checkout submitted successfully");
         } catch (\Throwable $th) {

@@ -206,6 +206,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 });
 
+Route::post('/check-username', [RegisterController::class, 'checkUsername'])->name('check.username');
+
 // Frontend Pages Routes
 Route::name('frontend.')->group(function () {
 

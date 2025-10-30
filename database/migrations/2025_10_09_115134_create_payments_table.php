@@ -28,7 +28,7 @@ return new class extends Migration
                 ->cascadeOnDelete();
             $table->string('amount');
             $table->string('transaction_id');
-            $table->enum('payment_method', ['cash', 'card', 'bank', 'paypal', 'others'])->default('cash');
+            $table->enum('payment_method', ['cash', 'stripe', 'card', 'bank', 'paypal', 'others'])->default('cash');
             $table->enum('payment_status', ['pending', 'success', 'failed'])->default('pending');
             $table->timestamps();
         });

@@ -144,4 +144,18 @@ class RegisterController extends Controller
         $username = $name . rand(1000, 9999);
         return $username;
     }
+
+    public function checkUsername(Request $request)
+    {
+        $username = $request->username;
+        $user = User::where('username', $username)->first();
+        if ($user) {
+            return response()->json([
+                'status' => 'matched',
+                'user' => $user,
+            ]);
+        } else {
+            return response()->json(['status' => 'not_matched']);
+        }
+    }
 }

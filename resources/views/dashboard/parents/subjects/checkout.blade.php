@@ -39,9 +39,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form action="{{ route('dashboard.checkout.submit') }}" method="POST">
+        <form action="{{ route('dashboard.checkout.submit') }}" method="POST" id="payment-form">
             @csrf
-            <input type="hidden" name="payment_method" id="payment_method" value="card">
+            <input type="hidden" name="payment_method" id="payment_method" value="stripe">
             <input type="hidden" name="subject_id" id="subject_id" value="{{ $subject->id }}">
             <input type="hidden" name="amount" id="amount" value="{{ $subject->price }}">
             <div class="row">
@@ -220,6 +220,13 @@
                                 <ul class="nav nav-pills card-header-pills row-gap-2 flex-wrap" id="paymentTabs"
                                     role="tablist">
                                     <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-stripe-tab" data-bs-toggle="pill"
+                                            data-bs-target="#pills-stripe" type="button" role="tab"
+                                            aria-controls="pills-stripe" aria-selected="true">
+                                            Stripe
+                                        </button>
+                                    </li>
+                                    {{-- <li class="nav-item" role="presentation">
                                         <button class="nav-link active" id="pills-cc-tab" data-bs-toggle="pill"
                                             data-bs-target="#pills-cc" type="button" role="tab"
                                             aria-controls="pills-cc" aria-selected="true">
@@ -232,11 +239,23 @@
                                             aria-controls="pills-paypal" aria-selected="true">
                                             Paypal
                                         </button>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </div>
                             <div class="tab-content px-0 pb-0" id="paymentTabsContent">
-                                <!-- Credit card -->
+                                <!-- Stripe Payment -->
+                                <div class="tab-pane fade show active" id="pills-stripe" role="tabpanel"
+                                    aria-labelledby="pills-stripe-tab">
+                                    <div class="row g-6">
+                                        <div class="col-md-12">
+                                            <label for="card-element"
+                                                class="form-label">{{ __('Credit or debit card') }}</label>
+                                            <div id="card-element" class="form-control p-3" style="height:auto;"></div>
+                                            <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <!-- Credit card -->
                                 <div class="tab-pane fade show active" id="pills-cc" role="tabpanel"
                                     aria-labelledby="pills-cc-tab">
                                     <div class="row g-6">
@@ -320,7 +339,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -358,11 +377,51 @@
 @endsection
 
 @section('script')
-    {{-- <script src="{{asset('assets/js/app-user-list.js')}}"></script> --}}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("{{ env('STRIPE_KEY') }}"); // your public key
+        const elements = stripe.elements();
+        const card = elements.create("card", {
+            style: {
+                base: {
+                    fontSize: "16px"
+                }
+            }
+        });
+        card.mount("#card-element");
+
+        card.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            displayError.textContent = event.error ? event.error.message : '';
+        });
+
+        // Form submit handler
+        const form = document.getElementById('payment-form');
+        if (form) {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const {
+                    token,
+                    error
+                } = await stripe.createToken(card);
+                if (error) {
+                    document.getElementById('card-errors').textContent = error.message;
+                } else {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.setAttribute('type', 'hidden');
+                    hiddenInput.setAttribute('name', 'stripeToken');
+                    hiddenInput.setAttribute('value', token.id);
+                    form.appendChild(hiddenInput);
+                    form.submit();
+                }
+            });
+        }
+    </script>
     <script>
         $(document).ready(function() {
             // === Default Payment Method ===
-            $('#payment_method').val('card');
+            $('#payment_method').val('stripe');
 
             // === When Payment Tab Changes ===
             $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
@@ -371,6 +430,8 @@
                     $('#payment_method').val('card');
                 } else if (target === '#pills-paypal') {
                     $('#payment_method').val('paypal');
+                } else if (target === '#pills-stripe') {
+                    $('#payment_method').val('stripe');
                 }
             });
 

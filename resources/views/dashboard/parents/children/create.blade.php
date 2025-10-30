@@ -40,9 +40,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
-        <form action="{{ route('dashboard.children.store') }}" method="POST">
+        <form action="{{ route('dashboard.children.store') }}" method="POST" id="payment-form">
             @csrf
-            <input type="hidden" name="payment_method" id="payment_method" value="card">
+            <input type="hidden" name="payment_method" id="payment_method" value="stripe">
             <div class="row">
                 <!-- Cart left -->
                 <div class="col-xl-8 mb-6 mb-xl-0">
@@ -75,28 +75,53 @@
                         <div class="mb-4 col-md-6">
                             <label for="child_name" class="form-label">{{ __('Child Name') }}</label><span
                                 class="text-danger">*</span>
-                            <input class="form-control @error('child_name') is-invalid @enderror" type="text" id="child_name"
-                                name="child_name" required placeholder="{{ __('Enter child name') }}" autofocus
-                                value="{{ old('child_name') }}" />
+                            <input class="form-control @error('child_name') is-invalid @enderror" type="text"
+                                id="child_name" name="child_name" required placeholder="{{ __('Enter child name') }}"
+                                autofocus value="{{ old('child_name') }}" />
                             @error('child_name')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-                        <div class="mb-4 col-md-6">
+                        {{-- <div class="mb-4 col-md-6">
                             <label for="child_email" class="form-label">{{ __('Child Email') }}</label><span
                                 class="text-danger">*</span>
-                            <input class="form-control @error('child_email') is-invalid @enderror" type="email" id="child_email"
-                                name="child_email" required placeholder="{{ __('Enter child email') }}"
+                            <input class="form-control @error('child_email') is-invalid @enderror" type="email"
+                                id="child_email" name="child_email" required placeholder="{{ __('Enter child email') }}"
                                 value="{{ old('child_email') }}" />
                             @error('child_email')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
+                        </div> --}}
+                        <div class="mb-4 col-md-6">
+                            <label for="username" class="form-label">{{ __('Username') }}</label><span
+                                class="text-danger">*</span>
+                            <input class="form-control @error('username') is-invalid @enderror" type="text"
+                                id="username" name="username" required placeholder="{{ __('Enter username') }}"
+                                value="{{ old('username') }}" />
+                            <div id="username_feedback" class="mt-2"></div>
+                            @error('username')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
                         </div>
                         <div class="mb-4 col-md-6">
+                            <label for="password" class="form-label">{{ __('Password') }}</label><span
+                                class="text-danger">*</span>
+                            <input class="form-control @error('password') is-invalid @enderror" type="password"
+                                id="password" name="password" required placeholder="{{ __('Enter password') }}"
+                                value="{{ old('password') }}" />
+                            @error('password')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="mb-4 col-md-3">
                             <label for="dob" class="form-label">{{ __('Date of Birth') }}</label><span
                                 class="text-danger">*</span>
                             <input class="form-control @error('dob') is-invalid @enderror" type="date" id="dob"
@@ -108,7 +133,7 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="mb-4 col-md-6">
+                        <div class="mb-4 col-md-3">
                             <label class="form-label" for="gender_id">{{ __('Gender') }}</label>
                             <select id="gender_id" name="gender_id"
                                 class="select2 form-select @error('gender_id') is-invalid @enderror">
@@ -242,6 +267,13 @@
                                 <ul class="nav nav-pills card-header-pills row-gap-2 flex-wrap" id="paymentTabs"
                                     role="tablist">
                                     <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="pills-stripe-tab" data-bs-toggle="pill"
+                                            data-bs-target="#pills-stripe" type="button" role="tab"
+                                            aria-controls="pills-stripe" aria-selected="true">
+                                            Stripe
+                                        </button>
+                                    </li>
+                                    {{-- <li class="nav-item" role="presentation">
                                         <button class="nav-link active" id="pills-cc-tab" data-bs-toggle="pill"
                                             data-bs-target="#pills-cc" type="button" role="tab"
                                             aria-controls="pills-cc" aria-selected="true">
@@ -254,11 +286,23 @@
                                             aria-controls="pills-paypal" aria-selected="true">
                                             Paypal
                                         </button>
-                                    </li>
+                                    </li> --}}
                                 </ul>
                             </div>
                             <div class="tab-content px-0 pb-0" id="paymentTabsContent">
-                                <!-- Credit card -->
+                                <!-- Stripe Payment -->
+                                <div class="tab-pane fade show active" id="pills-stripe" role="tabpanel"
+                                    aria-labelledby="pills-stripe-tab">
+                                    <div class="row g-6">
+                                        <div class="col-md-12">
+                                            <label for="card-element"
+                                                class="form-label">{{ __('Credit or debit card') }}</label>
+                                            <div id="card-element" class="form-control p-3" style="height:auto;"></div>
+                                            <div id="card-errors" class="text-danger mt-2" role="alert"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <!-- Credit card -->
                                 <div class="tab-pane fade show active" id="pills-cc" role="tabpanel"
                                     aria-labelledby="pills-cc-tab">
                                     <div class="row g-6">
@@ -342,7 +386,7 @@
                                             </p>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -388,9 +432,105 @@
 @endsection
 
 @section('script')
-    {{-- <script src="{{asset('assets/js/app-user-list.js')}}"></script> --}}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("{{ env('STRIPE_KEY') }}"); // your public key
+        const elements = stripe.elements();
+        const card = elements.create("card", {
+            style: {
+                base: {
+                    fontSize: "16px"
+                }
+            }
+        });
+        card.mount("#card-element");
+
+        card.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            displayError.textContent = event.error ? event.error.message : '';
+        });
+
+        // Form submit handler
+        const form = document.getElementById('payment-form');
+        if (form) {
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const {
+                    token,
+                    error
+                } = await stripe.createToken(card);
+                if (error) {
+                    document.getElementById('card-errors').textContent = error.message;
+                } else {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.setAttribute('type', 'hidden');
+                    hiddenInput.setAttribute('name', 'stripeToken');
+                    hiddenInput.setAttribute('value', token.id);
+                    form.appendChild(hiddenInput);
+                    form.submit();
+                }
+            });
+        }
+    </script>
     <script>
         $(document).ready(function() {
+            $('#username').on('input', function() {
+                const username = $(this).val().trim();
+
+                // Clear feedback if input is empty
+                if (!username) {
+                    $('#username_feedback').html('');
+                    return;
+                }
+
+                // Check minimum length requirement
+                if (username.length < 4) {
+                    $('#username_feedback').html(`
+                        <span class="text-warning">
+                            <i class="ti ti-alert-circle-filled"></i>
+                            Username must be at least <strong>4 characters</strong> long.
+                        </span>
+                    `);
+                    return;
+                }
+
+                // Proceed to AJAX check
+                $.ajax({
+                    url: "{{ route('check.username') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        username: username
+                    },
+                    success: function(response) {
+                        if (response.status === 'matched') {
+                            $('#username_feedback').html(`
+                                <span class="text-danger">
+                                    <i class="ti ti-circle-x-filled"></i>
+                                    Oops! This username is already taken.
+                                </span>
+                            `);
+                        } else {
+                            $('#username_feedback').html(`
+                                <span class="text-success">
+                                    <i class="ti ti-circle-check-filled"></i>
+                                    Great choice! This username is available.
+                                </span>
+                            `);
+                        }
+                    },
+                    error: function() {
+                        $('#username_feedback').html(`
+                            <span class="text-danger">
+                                <i class="ti ti-alert-triangle-filled"></i>
+                                Something went wrong while checking. Please try again.
+                            </span>
+                        `);
+                    }
+                });
+            });
+
             $('#subject_id').on('change', function() {
                 const selected = $(this).find(':selected');
                 const price = parseFloat(selected.data('price')) || 0;
@@ -420,7 +560,7 @@
                 });
             });
             // === Default Payment Method ===
-            $('#payment_method').val('card');
+            $('#payment_method').val('stripe');
 
             // === When Payment Tab Changes ===
             $('button[data-bs-toggle="pill"]').on('shown.bs.tab', function(e) {
@@ -429,6 +569,8 @@
                     $('#payment_method').val('card');
                 } else if (target === '#pills-paypal') {
                     $('#payment_method').val('paypal');
+                } else if (target === '#pills-stripe') {
+                    $('#payment_method').val('stripe');
                 }
             });
 
