@@ -96,7 +96,7 @@
                                             </div>
 
                                             <h5 class="h5 mb-2">{{ $name }}</h5>
-                                            <p class="mt-1">{{ $subject->short_description }}</p>
+                                            {{-- <p class="mt-1">{{ $subject->short_description }}</p> --}}
                                             <p class="text-muted mb-2">Class Ages: {{ $ages }} Years</p>
                                             <p class="d-flex align-items-center mb-1">
                                                 <i class="icon-base ti ti-clock me-1"></i>{{ $subject->duration }} weeks
