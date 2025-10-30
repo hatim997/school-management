@@ -70,7 +70,7 @@
                                     $subject = $group->first();
 
                                     // Determine if all versions are "coming soon"
-                                    $isComing = $group->every(fn($sub) => $sub->is_coming == 1);
+                                    $isComing = $group->every(fn($sub) => $sub->is_coming == '1');
                                 @endphp
 
                                 <div class="col-sm-6 col-lg-4">
