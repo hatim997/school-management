@@ -23,17 +23,47 @@ use Stripe\Charge;
 
 class CheckoutController extends Controller
 {
+    // public function index($id)
+    // {
+    //     try {
+    //         $subject = Subject::findOrFail($id);
+    //         $billing = Billing::where('user_id', auth()->user()->id)->first();
+    //         $parentChildrens = ParentChild::with('child')->where('parent_id', auth()->user()->id)->get();
+    //         return view('dashboard.parents.subjects.checkout', compact('subject', 'parentChildrens','billing'));
+    //     } catch (\Throwable $th) {
+    //         Log::error('Checkout Index Failed', ['error' => $th->getMessage()]);
+    //         return redirect()->back()->with('error', "Something went wrong! Please try again later");
+    //         throw $th;
+    //     }
+    // }
     public function index($id)
     {
         try {
             $subject = Subject::findOrFail($id);
-            $billing = Billing::where('user_id', auth()->user()->id)->first();
-            $parentChildrens = ParentChild::with('child')->where('parent_id', auth()->user()->id)->get();
-            return view('dashboard.parents.subjects.checkout', compact('subject', 'parentChildrens','billing'));
+
+            // ✅ Extract base name (remove age range like " 5-8")
+            $baseName = preg_replace('/\s+\d+-\d+$/', '', $subject->name);
+
+            // ✅ Get all subjects under same group
+            $relatedSubjects = Subject::where('is_active', 'active')
+                ->where('name', 'like', "{$baseName}%")
+                ->get();
+
+            // ✅ Get billing & children info
+            $billing = Billing::where('user_id', auth()->id())->first();
+            $parentChildrens = ParentChild::with('child')
+                ->where('parent_id', auth()->id())
+                ->get();
+
+            return view('dashboard.parents.subjects.checkout', compact(
+                'subject',
+                'relatedSubjects',
+                'parentChildrens',
+                'billing'
+            ));
         } catch (\Throwable $th) {
             Log::error('Checkout Index Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
-            throw $th;
         }
     }
 
@@ -216,7 +246,7 @@ class CheckoutController extends Controller
             $payment->amount = $request->amount;
             $payment->payment_status = 'success';
             $payment->save();
-            
+
             DB::commit();
             return redirect()->route('dashboard.subjects.index')->with('success', "Checkout submitted successfully");
         } catch (\Throwable $th) {

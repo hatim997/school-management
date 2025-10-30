@@ -55,38 +55,20 @@
                 <div class="card-body">
                     <div class="row gy-6 mb-6">
                         @if (isset($subjects) && count($subjects) > 0)
-                            @foreach ($subjects as $name => $group)
-                                @php
-                                    // Extract ages (e.g., "5-8", "9-15")
-                                    $ages = $group
-                                        ->map(function ($sub) {
-                                            return "{$sub->from_age}-{$sub->to_age}";
-                                        })
-                                        ->unique()
-                                        ->values()
-                                        ->implode(' & ');
-
-                                    // Use the first item for image, description, price, etc.
-                                    $subject = $group->first();
-
-                                    // Determine if all versions are "coming soon"
-                                    $isComing = $group->every(fn($sub) => $sub->is_coming == 1);
-                                @endphp
-
+                            @foreach ($subjects as $subject)
                                 <div class="col-sm-6 col-lg-4">
                                     <div class="card p-2 h-100 shadow-none border">
                                         <div class="rounded-2 text-center mb-4">
                                             <a href="javascript:void(0)">
                                                 <img class="img-fluid"
                                                     src="{{ $subject->image ? asset($subject->image) : asset('uploads/subjects/subject-default-image.jpg') }}"
-                                                    alt="{{ $name }}" />
+                                                    alt="{{ $subject->name }}" />
                                             </a>
                                         </div>
                                         <div class="card-body p-4 pt-2">
                                             <div class="d-flex justify-content-between align-items-center mb-4">
                                                 <span class="badge bg-label-primary">{{ $subject->code }}</span>
-                                                <p
-                                                    class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
+                                                <p class="d-flex align-items-center justify-content-center fw-medium gap-1 mb-0">
                                                     {{ $subject->rating }}
                                                     <span class="text-warning">
                                                         <i class="icon-base ti ti-star-filled icon-lg me-1 mb-1_5"></i>
@@ -94,32 +76,25 @@
                                                     <span class="fw-normal">({{ $subject->total_enrolled }})</span>
                                                 </p>
                                             </div>
-
-                                            <h5 class="h5 mb-2">{{ $name }}</h5>
+                                            <h5 class="h5 mb-2">{{ $subject->name }}</h5>
                                             <p class="mt-1">{{ $subject->short_description }}</p>
-                                            <p class="text-muted mb-2">Class Ages: {{ $ages }} Years</p>
                                             <p class="d-flex align-items-center mb-1">
                                                 <i class="icon-base ti ti-clock me-1"></i>{{ $subject->duration }} weeks
                                             </p>
 
-                                            <div
-                                                class="d-flex flex-column flex-md-row gap-4 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
-                                                @if ($isComing)
-                                                    <button
-                                                        class="w-100 btn btn-secondary d-flex align-items-center justify-content-center"
-                                                        disabled>
+                                            <div class="d-flex flex-column flex-md-row gap-4 text-nowrap flex-wrap flex-md-nowrap flex-lg-wrap flex-xxl-nowrap">
+                                                @if ($subject->is_coming == 1)
+                                                    <button class="w-100 btn btn-secondary d-flex align-items-center justify-content-center" disabled>
                                                         <span class="me-2">Coming Soon</span>
                                                         <i class="icon-base ti ti-clock-hour-4 icon-xs lh-1"></i>
                                                     </button>
                                                 @else
                                                     <a class="w-100 btn btn-primary d-flex align-items-center"
-                                                        href="{{ route('dashboard.checkout.index', $subject->id) }}">
+                                                    href="{{ route('dashboard.checkout.index', $subject->id) }}">
                                                         <span class="me-2">
-                                                            Purchase Now
-                                                            ({{ \App\Helpers\Helper::formatCurrency($subject->price) }})
+                                                            Purchase Now ({{ \App\Helpers\Helper::formatCurrency($subject->price) }})
                                                         </span>
-                                                        <i
-                                                            class="icon-base ti tabler-chevron-right icon-xs lh-1 scaleX-n1-rtl"></i>
+                                                        <i class="icon-base ti tabler-chevron-right icon-xs lh-1 scaleX-n1-rtl"></i>
                                                     </a>
                                                 @endif
                                             </div>

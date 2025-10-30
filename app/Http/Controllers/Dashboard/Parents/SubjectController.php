@@ -12,9 +12,33 @@ class SubjectController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index(Request $request)
+    // {
+    //     $this->authorize('view subject');
+    //     try {
+    //         // ✅ Base query for active subjects
+    //         $query = Subject::where('is_active', 'active');
+
+    //         // ✅ If search keyword provided, filter by name
+    //         if ($request->filled('search')) {
+    //             $search = $request->input('search');
+    //             $query->where('name', 'like', "%{$search}%");
+    //         }
+
+    //         // ✅ Get results
+    //         $subjects = $query->get();
+    //         $totalSubjects = $subjects->count();
+    //         return view('dashboard.parents.subjects.index', compact('subjects', 'totalSubjects'));
+    //     } catch (\Throwable $th) {
+    //         Log::error('Subjects Index Failed', ['error' => $th->getMessage()]);
+    //         return redirect()->back()->with('error', "Something went wrong! Please try again later");
+    //         throw $th;
+    //     }
+    // }
     public function index(Request $request)
     {
         $this->authorize('view subject');
+
         try {
             // ✅ Base query for active subjects
             $query = Subject::where('is_active', 'active');
@@ -25,16 +49,26 @@ class SubjectController extends Controller
                 $query->where('name', 'like', "%{$search}%");
             }
 
-            // ✅ Get results
+            // ✅ Get all active subjects
             $subjects = $query->get();
             $totalSubjects = $subjects->count();
-            return view('dashboard.parents.subjects.index', compact('subjects', 'totalSubjects'));
+
+            // ✅ Group subjects by base name (e.g. "Coding 5-8" → "Coding")
+            $groupedSubjects = $subjects->groupBy(function ($item) {
+                return preg_replace('/\s+\d+-\d+$/', '', $item->name);
+            });
+
+            // ✅ Pass grouped subjects to the view
+            return view('dashboard.parents.subjects.index', [
+                'subjects' => $groupedSubjects,
+                'totalSubjects' => $totalSubjects,
+            ]);
         } catch (\Throwable $th) {
             Log::error('Subjects Index Failed', ['error' => $th->getMessage()]);
             return redirect()->back()->with('error', "Something went wrong! Please try again later");
-            throw $th;
         }
     }
+
 
     /**
      * Show the form for creating a new resource.

@@ -42,47 +42,49 @@
         <form action="{{ route('dashboard.checkout.submit') }}" method="POST" id="payment-form">
             @csrf
             <input type="hidden" name="payment_method" id="payment_method" value="stripe">
-            <input type="hidden" name="subject_id" id="subject_id" value="{{ $subject->id }}">
+            {{-- <input type="hidden" name="subject_id" id="subject_id" value="{{ $subject->id }}"> --}}
             <input type="hidden" name="amount" id="amount" value="{{ $subject->price }}">
             <div class="row">
                 <!-- Cart left -->
                 <div class="col-xl-8 mb-6 mb-xl-0">
                     <!-- Shopping bag -->
                     <h5>Selected Subject</h5>
-                    <ul class="list-group mb-4">
-                        <li class="list-group-item p-6">
-                            <div class="d-flex gap-4">
-                                <div class="flex-shrink-0 d-flex align-items-center">
-                                    <img src="{{ $subject->image ? asset($subject->image) : asset('uploads/subjects/subject-default-image.jpg') }}"
-                                        alt="google home" class="w-px-100" />
-                                </div>
-                                <div class="flex-grow-1">
-                                    <div class="row">
-                                        <div class="col-md-8">
-                                            <p class="me-3 mb-2">
-                                                <a href="javascript:void(0)" class="fw-medium">
-                                                    <span class="text-heading">{{ $subject->name }}</span></a>
-                                            </p>
-                                            <div class="text-body-secondary mb-2 d-flex flex-wrap">
-                                                <span class="me-1">Subject Code:</span>
-                                                <a href="javascript:void(0)" class="me-4">{{ $subject->code }}</a>
-                                                <span class="badge bg-label-success">{{ $subject->duration }} weeks</span>
-                                            </div>
+
+                    @if (isset($relatedSubjects) && count($relatedSubjects) > 0)
+                        <ul class="list-group mb-4">
+                            @foreach ($relatedSubjects as $related)
+                                <li class="list-group-item p-4 {{ $related->is_coming == 1 ? 'bg-light opacity-75' : '' }}">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center gap-3">
+                                            <input type="radio" name="subject_id" id="subject_{{ $related->id }}"
+                                                value="{{ $related->id }}" class="form-check-input me-2"
+                                                {{ $related->is_coming == 1 ? 'disabled' : '' }}
+                                                {{ $related->id == $subject->id ? 'checked' : '' }}>
+
+                                            <label for="subject_{{ $related->id }}" class="mb-0">
+                                                <strong>{{ $related->name }}</strong><br>
+                                                <small class="text-muted">
+                                                    {{ $related->duration }} weeks
+                                                    • {{ $related->code }}
+                                                </small>
+                                            </label>
                                         </div>
-                                        <div class="col-md-4">
-                                            <div class="text-md-end">
-                                                {{-- <button type="button" class="btn-close btn-pinned" aria-label="Close"></button> --}}
-                                                <div class="my-2 mt-md-6 mb-md-4">
-                                                    <span
-                                                        class="text-primary">{{ \App\Helpers\Helper::formatCurrency($subject->price) }}</span>
-                                                </div>
-                                            </div>
+
+                                        <div class="text-end">
+                                            @if ($related->is_coming == 1)
+                                                <span class="badge bg-label-warning">Coming Soon</span>
+                                            @else
+                                                <span class="text-primary fw-semibold">
+                                                    {{ \App\Helpers\Helper::formatCurrency($related->price) }}
+                                                </span>
+                                            @endif
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
                     <h5>Select a Child</h5>
                     <div class="row">
                         <div class="mb-4 col-md-12">
