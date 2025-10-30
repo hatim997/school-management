@@ -27,7 +27,7 @@
                         <tr>
                             <th>{{ __('Sr.') }}</th>
                             <th>{{ __('Name') }}</th>
-                            <th>{{ __('Email') }}</th>
+                            <th>{{ __('Username') }}</th>
                             <th>{{ __('Age') }}</th>
                             @canany(['delete children', 'update children'])<th>{{ __('Action') }}</th>@endcan
                         </tr>
@@ -37,7 +37,7 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $children->child->name }}</td>
-                                <td>{{ $children->child->email }}</td>
+                                <td>{{ '@'.$children->child->username }}</td>
                                 <td>{{ $children->child->profile->age }}</td>
                                 @canany(['delete children', 'update children'])
                                     <td class="d-flex">

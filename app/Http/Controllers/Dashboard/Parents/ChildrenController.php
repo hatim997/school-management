@@ -52,7 +52,7 @@ class ChildrenController extends Controller
     {
         $this->authorize('create children');
         try {
-            $subjects = Subject::where('is_active', 'active')->get();
+            $subjects = Subject::where('is_active', 'active')->where('is_coming', '0')->get();
             $billing = Billing::where('user_id', auth()->user()->id)->first();
             $genders = Gender::where('is_active', 'active')->get();
             return view('dashboard.parents.children.create', compact('genders', 'subjects', 'billing'));
